@@ -1,0 +1,1371 @@
+cat > /home/claude/tripwave_v2.html << 'ENDOFFILE'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TripWave — Hotels, Flights & Holiday Packages</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root {
+  --primary:#FF5722;--primary-dark:#E64A19;--secondary:#1A237E;--accent:#FFD600;
+  --bg:#F7F8FC;--white:#ffffff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;
+  --card-shadow:0 4px 24px rgba(0,0,0,0.09);--radius:16px;
+  --green:#16a34a;--red:#dc2626;--orange:#ea580c;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--secondary);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:64px;box-shadow:0 2px 16px rgba(0,0,0,0.18)}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.logo-icon{width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-text{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--white);letter-spacing:-0.5px}
+.logo-text span{color:var(--accent)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.9rem;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--accent)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.btn-login{color:var(--white);background:transparent;border:1px solid rgba(255,255,255,0.4);padding:7px 18px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.88rem;transition:all 0.2s}
+.btn-login:hover{background:rgba(255,255,255,0.12)}
+.btn-signup{color:var(--secondary);background:var(--accent);border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;transition:all 0.2s}
+.btn-signup:hover{background:#e6c200}
+.btn-mybookings{color:var(--white);background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);padding:7px 14px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;transition:all 0.2s;display:none}
+.btn-mybookings:hover{background:rgba(255,255,255,0.22)}
+.btn-mybookings.visible{display:block}
+
+/* HERO */
+.hero{min-height:100vh;background:linear-gradient(135deg,#1A237E 0%,#283593 40%,#1565C0 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 5% 60px;position:relative;overflow:hidden}
+.hero-bg-circles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.circle{position:absolute;border-radius:50%;opacity:0.07;background:var(--white);animation:float 8s ease-in-out infinite}
+.circle-1{width:500px;height:500px;top:-150px;right:-100px;animation-delay:0s}
+.circle-2{width:300px;height:300px;bottom:0;left:-80px;animation-delay:3s}
+.circle-3{width:200px;height:200px;top:40%;left:10%;animation-delay:5s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,214,0,0.18);border:1px solid rgba(255,214,0,0.35);color:var(--accent);padding:6px 16px;border-radius:999px;font-size:0.82rem;font-weight:600;margin-bottom:20px;letter-spacing:0.5px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4rem);color:var(--white);text-align:center;line-height:1.15;max-width:760px;margin-bottom:14px;font-weight:900}
+.hero h1 span{color:var(--accent)}
+.hero p{color:rgba(255,255,255,0.7);text-align:center;font-size:1.05rem;max-width:520px;margin-bottom:44px;line-height:1.7}
+
+/* SEARCH BOX */
+.search-box{background:var(--white);border-radius:var(--radius);padding:28px 32px;width:100%;max-width:960px;box-shadow:0 20px 60px rgba(0,0,0,0.22);position:relative;z-index:2}
+.search-tabs{display:flex;gap:4px;margin-bottom:24px}
+.tab{padding:10px 22px;border-radius:10px;cursor:pointer;font-size:0.92rem;font-weight:500;border:none;background:transparent;color:var(--muted);transition:all 0.2s;display:flex;align-items:center;gap:7px}
+.tab.active{background:var(--primary);color:var(--white)}
+.tab:hover:not(.active){background:#f3f4f6}
+.search-fields{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;align-items:end}
+.field-group{display:flex;flex-direction:column;gap:5px}
+.field-group label{font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.field-group input,.field-group select{border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:0.97rem;color:var(--text);background:var(--bg);outline:none;transition:border-color 0.2s}
+.field-group input:focus,.field-group select:focus{border-color:var(--primary)}
+.btn-search{background:var(--primary);color:var(--white);border:none;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.btn-search:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,87,34,0.35)}
+
+/* STATS */
+.stats-bar{background:var(--white);padding:28px 5%;display:flex;justify-content:center;gap:60px;border-bottom:1px solid var(--border)}
+.stat{text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;color:var(--primary)}
+.stat-label{font-size:0.82rem;color:var(--muted);font-weight:500;margin-top:2px}
+
+/* SECTIONS */
+section{padding:72px 5%}
+.section-header{text-align:center;margin-bottom:48px}
+.section-tag{display:inline-block;background:rgba(255,87,34,0.1);color:var(--primary);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:5px 14px;border-radius:999px;margin-bottom:12px}
+.section-header h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;line-height:1.2}
+.section-header p{color:var(--muted);margin-top:10px;font-size:1rem}
+
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px}
+.dest-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);background:var(--white);cursor:pointer;transition:transform 0.25s,box-shadow 0.25s;position:relative}
+.dest-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.14)}
+.dest-img{height:200px;width:100%;object-fit:cover;display:block}
+.dest-badge{position:absolute;top:12px;left:12px;background:var(--primary);color:var(--white);font-size:0.74rem;font-weight:700;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.5px}
+.dest-body{padding:18px}
+.dest-body h3{font-size:1.05rem;font-weight:700;margin-bottom:4px}
+.dest-body .meta{color:var(--muted);font-size:0.85rem;margin-bottom:12px}
+.dest-footer{display:flex;align-items:center;justify-content:space-between}
+.price-from{font-size:0.78rem;color:var(--muted)}
+.price-val{font-size:1.2rem;font-weight:700;color:var(--primary)}
+.rating-display{display:flex;align-items:center;gap:4px;font-size:0.85rem;font-weight:600;color:#f59e0b}
+.star-rating-widget{display:flex;align-items:center;gap:6px;margin-top:10px}
+.star-rating-widget .stars-input{display:flex;gap:2px;cursor:pointer}
+.star-rating-widget .stars-input span{font-size:1.1rem;color:#d1d5db;transition:color 0.15s,transform 0.15s}
+.star-rating-widget .stars-input span.active{color:#f59e0b}
+.star-rating-widget .stars-input span:hover,.star-rating-widget .stars-input span.hover{color:#f59e0b;transform:scale(1.2)}
+.rating-count{font-size:0.78rem;color:var(--muted)}
+
+/* PACKAGES */
+.packages-section{background:linear-gradient(180deg,#f0f4ff 0%,var(--bg) 100%)}
+.pkg-card{border-radius:var(--radius);background:var(--white);box-shadow:var(--card-shadow);overflow:hidden;cursor:pointer;transition:transform 0.25s,box-shadow 0.25s;display:flex;flex-direction:column}
+.pkg-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.14)}
+.pkg-banner{height:170px;position:relative;overflow:hidden}
+.pkg-banner img{width:100%;height:100%;object-fit:cover}
+.pkg-banner-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.5),transparent);display:flex;align-items:flex-end;padding:14px}
+.pkg-banner-overlay span{color:white;font-weight:700;font-size:1rem;text-shadow:0 1px 4px rgba(0,0,0,0.5)}
+.pkg-body{padding:18px;flex:1;display:flex;flex-direction:column}
+.pkg-body h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.pkg-features{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.feature-pill{background:#f3f4f6;color:var(--text);font-size:0.76rem;font-weight:500;padding:4px 10px;border-radius:999px}
+.pkg-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:14px;border-top:1px solid var(--border)}
+.pkg-price small{display:block;font-size:0.76rem;color:var(--muted)}
+.pkg-price strong{font-size:1.25rem;font-weight:700;color:var(--primary)}
+.btn-book{background:var(--secondary);color:var(--white);border:none;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.86rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn-book:hover{background:#0d1757;transform:translateY(-1px)}
+
+/* HOTELS */
+.hotel-card{border-radius:var(--radius);background:var(--white);box-shadow:var(--card-shadow);overflow:hidden;display:flex;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
+.hotel-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,0.12)}
+.hotel-img{width:160px;min-height:160px;flex-shrink:0;overflow:hidden}
+.hotel-img img{width:100%;height:100%;object-fit:cover}
+.hotel-body{padding:16px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.hotel-body h3{font-size:1rem;font-weight:700;margin-bottom:3px}
+.hotel-location{font-size:0.82rem;color:var(--muted);margin-bottom:6px}
+.stars{color:#f59e0b;font-size:0.85rem;letter-spacing:1px}
+.hotel-amenities{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.amenity{font-size:0.75rem;color:var(--muted);background:#f3f4f6;padding:3px 9px;border-radius:6px}
+.hotel-footer{display:flex;justify-content:space-between;align-items:center}
+.hotel-price strong{font-size:1.1rem;font-weight:700;color:var(--primary)}
+.hotel-price small{font-size:0.75rem;color:var(--muted)}
+.hotels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+
+/* OFFERS */
+.offers-section{padding:0 5% 72px}
+.offers-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.offer-card{border-radius:var(--radius);overflow:hidden;position:relative;cursor:pointer;transition:transform 0.2s;height:220px}
+.offer-card:hover{transform:scale(1.02)}
+.offer-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.offer-overlay{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:32px}
+.offer-card.primary-offer .offer-overlay{background:linear-gradient(135deg,rgba(255,87,34,0.88),rgba(230,74,25,0.75))}
+.offer-card.secondary-offer .offer-overlay{background:linear-gradient(135deg,rgba(26,35,126,0.88),rgba(57,73,171,0.75))}
+.offer-text h3{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--white);margin-bottom:6px}
+.offer-text p{color:rgba(255,255,255,0.85);font-size:0.9rem;margin-bottom:18px}
+.btn-offer{background:var(--white);border:none;padding:10px 22px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.offer-card.primary-offer .btn-offer{color:var(--primary)}
+.offer-card.secondary-offer .btn-offer{color:var(--secondary)}
+
+/* WHY */
+.why-section{background:var(--secondary)}
+.why-section .section-header h2{color:var(--white)}
+.why-section .section-header p{color:rgba(255,255,255,0.6)}
+.why-section .section-tag{background:rgba(255,214,0,0.2);color:var(--accent)}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px}
+.why-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:28px 24px;text-align:center;transition:background 0.2s}
+.why-card:hover{background:rgba(255,255,255,0.12)}
+.why-icon{font-size:2.2rem;margin-bottom:14px}
+.why-card h3{color:var(--white);font-size:1rem;font-weight:700;margin-bottom:8px}
+.why-card p{color:rgba(255,255,255,0.55);font-size:0.86rem;line-height:1.6}
+
+/* TESTIMONIALS */
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
+.testi-card{background:var(--white);border-radius:var(--radius);padding:28px;box-shadow:var(--card-shadow)}
+.testi-stars{color:#f59e0b;font-size:1rem;margin-bottom:12px}
+.testi-text{color:var(--text);font-size:0.94rem;line-height:1.7;font-style:italic;margin-bottom:18px}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0}
+.testi-avatar img{width:100%;height:100%;object-fit:cover}
+.testi-name{font-weight:700;font-size:0.92rem}
+.testi-trip{font-size:0.8rem;color:var(--muted)}
+
+/* APP BANNER */
+.app-banner{margin:0 5% 72px;border-radius:24px;overflow:hidden;position:relative;height:220px}
+.app-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.app-banner-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,214,0,0.92),rgba(255,152,0,0.85));display:flex;justify-content:space-between;align-items:center;padding:40px 60px}
+.app-text h2{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--secondary);margin-bottom:10px}
+.app-text p{color:rgba(26,35,126,0.75);font-size:1rem;margin-bottom:24px;max-width:400px}
+.app-btns{display:flex;gap:14px}
+.btn-app{background:var(--secondary);color:var(--white);border:none;padding:12px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s}
+.btn-app:hover{background:#0d1757;transform:translateY(-2px)}
+.app-emoji{font-size:7rem;opacity:0.25;position:absolute;right:60px}
+
+/* FOOTER */
+footer{background:#0f1629;color:rgba(255,255,255,0.65);padding:60px 5% 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.footer-brand p{margin-top:14px;font-size:0.87rem;line-height:1.7;max-width:260px}
+.footer-col h4{color:var(--white);font-size:0.9rem;font-weight:700;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:10px}
+.footer-col ul li a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.87rem;transition:color 0.2s}
+.footer-col ul li a:hover{color:var(--accent)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:28px;display:flex;justify-content:space-between;align-items:center;font-size:0.83rem}
+.social-links{display:flex;gap:14px}
+.social-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;text-decoration:none;transition:background 0.2s}
+.social-btn:hover{background:var(--primary)}
+
+/* MODALS */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:20px;padding:36px;width:100%;max-width:520px;position:relative;animation:slideUp 0.3s ease;max-height:90vh;overflow-y:auto}
+.modal.wide{max-width:640px}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-close{position:absolute;top:14px;right:14px;background:#f3f4f6;border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:1}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;margin-bottom:4px}
+.modal-subtitle{color:var(--muted);font-size:0.88rem;margin-bottom:20px}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:0.78rem;font-weight:600;margin-bottom:5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.modal-field input,.modal-field select{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.2s;background:white}
+.modal-field input:focus,.modal-field select:focus{border-color:var(--primary)}
+.btn-primary-full{width:100%;background:var(--primary);color:var(--white);border:none;padding:14px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:6px}
+.btn-primary-full:hover{background:var(--primary-dark)}
+.modal-divider{text-align:center;color:var(--muted);font-size:0.85rem;margin:14px 0}
+.modal-switch{text-align:center;font-size:0.9rem;margin-top:14px}
+.modal-switch a{color:var(--primary);font-weight:600;cursor:pointer;text-decoration:none}
+
+/* BOOKING MODAL SPECIFIC */
+.booking-header{background:linear-gradient(135deg,var(--secondary),#3949AB);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;gap:14px;align-items:center}
+.booking-header img{width:72px;height:72px;border-radius:8px;object-fit:cover}
+.booking-header-info h3{color:white;font-size:1rem;font-weight:700;margin-bottom:2px}
+.booking-header-info p{color:rgba(255,255,255,0.65);font-size:0.82rem}
+.booking-header-info .booking-price{color:var(--accent);font-size:1.1rem;font-weight:700;margin-top:4px}
+.bk-section-title{font-size:0.76rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px}
+.fields-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* PAYMENT METHODS */
+.payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pay-method{border:2px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:0.85rem;font-weight:600;transition:all 0.2s;background:white;font-family:'DM Sans',sans-serif}
+.pay-method:hover{border-color:var(--primary);background:rgba(255,87,34,0.04)}
+.pay-method.selected{border-color:var(--primary);background:rgba(255,87,34,0.06);color:var(--primary)}
+
+/* QR CODE SECTION */
+.qr-section{display:none;text-align:center;background:#f8fafc;border-radius:12px;padding:24px;margin-bottom:12px}
+.qr-section.show{display:block}
+.qr-section h4{font-size:0.95rem;font-weight:700;margin-bottom:4px;color:var(--text)}
+.qr-section p{font-size:0.82rem;color:var(--muted);margin-bottom:16px}
+#qrcode{display:inline-block;padding:12px;background:white;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+#qrcode canvas,#qrcode img{display:block}
+.qr-upi-id{font-size:0.78rem;color:var(--muted);margin-top:12px;background:white;border-radius:8px;padding:8px 12px;border:1px solid var(--border);word-break:break-all}
+.qr-apps{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.qr-app-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;background:white;border:1px solid var(--border);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.qr-app-btn:hover{border-color:var(--primary);color:var(--primary)}
+.qr-timer{margin-top:12px;font-size:0.82rem;color:var(--orange);font-weight:600}
+
+/* PRICE BREAKDOWN */
+.price-breakdown{background:#f7f8fc;border-radius:10px;padding:14px;margin:14px 0}
+.price-row{display:flex;justify-content:space-between;font-size:0.86rem;color:var(--muted);margin-bottom:6px}
+.price-row.total{color:var(--text);font-weight:700;font-size:0.98rem;border-top:1px solid var(--border);padding-top:8px;margin-top:4px;margin-bottom:0}
+.discount-row{color:var(--green)!important;font-weight:600}
+
+/* CARD / NET / WALLET FIELDS */
+.extra-fields{display:none}
+.extra-fields.show{display:block}
+
+/* MY BOOKINGS MODAL */
+.bookings-list{display:flex;flex-direction:column;gap:12px;max-height:60vh;overflow-y:auto;padding-right:4px}
+.booking-item{border:1.5px solid var(--border);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start;background:#fafafa;transition:border-color 0.2s}
+.booking-item:hover{border-color:#c7d2fe}
+.booking-item img{width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.booking-item-info{flex:1}
+.booking-item-info h4{font-size:0.95rem;font-weight:700;margin-bottom:2px}
+.booking-item-info .bk-ref{font-size:0.76rem;color:var(--muted);font-family:monospace;letter-spacing:1px}
+.booking-item-info .bk-dates{font-size:0.8rem;color:var(--muted);margin-top:4px}
+.booking-item-info .bk-amount{font-size:0.9rem;font-weight:700;color:var(--primary);margin-top:4px}
+.booking-item-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+.status-badge{padding:3px 10px;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.status-confirmed{background:#dcfce7;color:#16a34a}
+.status-cancelled{background:#fee2e2;color:#dc2626}
+.status-refunded{background:#dbeafe;color:#1d4ed8}
+.btn-cancel-bk{background:#fff;border:1.5px solid #fca5a5;color:#dc2626;padding:6px 12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.btn-cancel-bk:hover{background:#fee2e2}
+.btn-cancel-bk:disabled{opacity:0.4;cursor:not-allowed}
+.empty-bookings{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty-bookings .emoji{font-size:3rem;margin-bottom:12px}
+
+/* CANCEL CONFIRM MODAL */
+.cancel-info{background:#fff7ed;border:1px solid #fdba74;border-radius:10px;padding:14px;margin:14px 0}
+.cancel-info p{font-size:0.85rem;color:#9a3412;line-height:1.6}
+.cancel-info .refund-amount{font-size:1.1rem;font-weight:700;color:var(--green);margin-top:8px}
+.btn-danger-full{width:100%;background:var(--red);color:white;border:none;padding:13px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:6px}
+.btn-danger-full:hover{background:#b91c1c}
+.btn-outline-full{width:100%;background:white;color:var(--text);border:1.5px solid var(--border);padding:12px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:8px}
+.btn-outline-full:hover{border-color:var(--primary);color:var(--primary)}
+
+/* DB ADMIN PANEL */
+.admin-panel{position:fixed;bottom:20px;left:20px;z-index:900}
+.admin-toggle{background:var(--secondary);color:white;border:none;padding:10px 16px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.2);transition:all 0.2s}
+.admin-toggle:hover{background:#0d1757;transform:translateY(-2px)}
+.admin-drawer{position:fixed;bottom:0;left:0;right:0;height:70vh;background:white;border-radius:20px 20px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,0.2);transform:translateY(100%);transition:transform 0.4s ease;z-index:1800;display:flex;flex-direction:column}
+.admin-drawer.open{transform:translateY(0)}
+.admin-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.admin-header h3{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900}
+.admin-tabs{display:flex;gap:6px;padding:12px 24px;border-bottom:1px solid var(--border);flex-shrink:0}
+.admin-tab{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:600;background:#f3f4f6;color:var(--muted);transition:all 0.2s}
+.admin-tab.active{background:var(--secondary);color:white}
+.admin-content{flex:1;overflow-y:auto;padding:16px 24px}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.admin-stat-card{background:linear-gradient(135deg,var(--secondary),#3949AB);border-radius:10px;padding:14px;color:white;text-align:center}
+.admin-stat-card .num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--accent)}
+.admin-stat-card .lbl{font-size:0.76rem;color:rgba(255,255,255,0.7);margin-top:2px}
+.db-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.db-table th{background:#f3f4f6;padding:8px 12px;text-align:left;font-weight:700;color:var(--muted);text-transform:uppercase;font-size:0.72rem;letter-spacing:0.5px;border-bottom:1px solid var(--border)}
+.db-table td{padding:10px 12px;border-bottom:1px solid #f3f4f6;vertical-align:top}
+.db-table tr:hover td{background:#fafafa}
+.export-btns{display:flex;gap:10px;margin-bottom:16px}
+.btn-export{background:var(--secondary);color:white;border:none;padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn-export:hover{background:#0d1757}
+.btn-export.green{background:var(--green)}
+.btn-export.green:hover{background:#15803d}
+.btn-clear{background:#fee2e2;color:var(--red);border:none;padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn-clear:hover{background:#fecaca}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#1a1a2e;color:var(--white);padding:12px 20px;border-radius:12px;font-size:0.88rem;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,0.25);transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:9999;display:flex;align-items:center;gap:10px;max-width:340px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.green{background:#16a34a}
+.toast.red{background:#dc2626}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .search-fields{grid-template-columns:1fr 1fr}
+  .search-fields .btn-search{grid-column:1/-1;justify-content:center}
+  .stats-bar{gap:24px;flex-wrap:wrap}
+  .offers-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .app-banner-overlay{padding:28px;flex-direction:column;align-items:flex-start}
+  .app-emoji{display:none}
+  .fields-row{grid-template-columns:1fr}
+  .payment-methods{grid-template-columns:1fr 1fr}
+  .admin-stats{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .search-fields{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .hotel-img{width:110px}
+  .admin-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">✈️</div>
+    <span class="logo-text">Trip<span>Wave</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hotels">Hotels</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#flights">Flights</a></li>
+    <li><a href="#offers">Offers</a></li>
+    <li><a href="#why">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-mybookings" id="btnMyBookings" onclick="openMyBookings()">📋 My Bookings</button>
+    <button class="btn-login" onclick="openModal('login')">Log In</button>
+    <button class="btn-signup" onclick="openModal('signup')">Sign Up</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circles">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
+  <div class="hero-badge">🌟 India's #1 Travel Platform</div>
+  <h1>Explore the World,<br><span>Your Way</span></h1>
+  <p>Hotels, flights, and dream holiday packages — all in one place. Best prices guaranteed.</p>
+  <div class="search-box">
+    <div class="search-tabs">
+      <button class="tab active" onclick="setTab(this,'hotels')">🏨 Hotels</button>
+      <button class="tab" onclick="setTab(this,'flights')">✈️ Flights</button>
+      <button class="tab" onclick="setTab(this,'packages')">🎒 Packages</button>
+      <button class="tab" onclick="setTab(this,'holidays')">🌴 Holidays</button>
+    </div>
+    <div class="search-fields" id="searchFields">
+      <div class="field-group"><label>Destination / Hotel</label><input type="text" placeholder="Where are you going?" id="destination"/></div>
+      <div class="field-group"><label>Check-in</label><input type="date" id="checkin"/></div>
+      <div class="field-group"><label>Check-out</label><input type="date" id="checkout"/></div>
+      <button class="btn-search" onclick="handleSearch()">🔍 Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">2M+</div><div class="stat-label">Happy Travellers</div></div>
+  <div class="stat"><div class="stat-num">50K+</div><div class="stat-label">Hotels Listed</div></div>
+  <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Destinations</div></div>
+  <div class="stat"><div class="stat-num">₹0</div><div class="stat-label">Booking Fees</div></div>
+  <div class="stat"><div class="stat-num">4.8★</div><div class="stat-label">App Rating</div></div>
+</div>
+
+<!-- DESTINATIONS -->
+<section id="destinations">
+  <div class="section-header">
+    <div class="section-tag">🔥 Trending Now</div>
+    <h2>Popular Destinations</h2>
+    <p>Hand-picked getaways loved by millions of Indian travellers</p>
+  </div>
+  <div class="cards-grid">
+    <div class="dest-card" onclick="openBooking('Goa Beach Stay','1299','https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=400&q=80','goa')">
+      <img class="dest-img" src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80" alt="Goa" loading="lazy"/>
+      <div class="dest-badge">Trending</div>
+      <div class="dest-body">
+        <h3>Goa</h3>
+        <div class="meta">🌊 Beaches · Nightlife · Culture</div>
+        <div class="dest-footer">
+          <div><div class="price-from">Hotels from</div><div class="price-val">₹1,299/night</div></div>
+          <div class="rating-display">⭐ <span id="avg-goa">4.8</span></div>
+        </div>
+        <div class="star-rating-widget">
+          <div class="stars-input" data-id="goa" onmouseleave="clearHover('goa')">
+            <span onclick="setRating('goa',1,event)" onmouseover="hoverRating('goa',1)">★</span>
+            <span onclick="setRating('goa',2,event)" onmouseover="hoverRating('goa',2)">★</span>
+            <span onclick="setRating('goa',3,event)" onmouseover="hoverRating('goa',3)">★</span>
+            <span onclick="setRating('goa',4,event)" onmouseover="hoverRating('goa',4)">★</span>
+            <span onclick="setRating('goa',5,event)" onmouseover="hoverRating('goa',5)">★</span>
+          </div>
+          <span class="rating-count" id="count-goa">(2,341 ratings)</span>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card" onclick="openBooking('Manali Mountain Stay','899','https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=400&q=80','manali')">
+      <img class="dest-img" src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80" alt="Manali" loading="lazy"/>
+      <div class="dest-badge">Popular</div>
+      <div class="dest-body">
+        <h3>Manali</h3>
+        <div class="meta">❄️ Mountains · Adventure · Snow</div>
+        <div class="dest-footer">
+          <div><div class="price-from">Hotels from</div><div class="price-val">₹899/night</div></div>
+          <div class="rating-display">⭐ <span id="avg-manali">4.7</span></div>
+        </div>
+        <div class="star-rating-widget">
+          <div class="stars-input" data-id="manali" onmouseleave="clearHover('manali')">
+            <span onclick="setRating('manali',1,event)" onmouseover="hoverRating('manali',1)">★</span>
+            <span onclick="setRating('manali',2,event)" onmouseover="hoverRating('manali',2)">★</span>
+            <span onclick="setRating('manali',3,event)" onmouseover="hoverRating('manali',3)">★</span>
+            <span onclick="setRating('manali',4,event)" onmouseover="hoverRating('manali',4)">★</span>
+            <span onclick="setRating('manali',5,event)" onmouseover="hoverRating('manali',5)">★</span>
+          </div>
+          <span class="rating-count" id="count-manali">(1,892 ratings)</span>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card" onclick="openBooking('Rajasthan Royal Heritage','1599','https://images.unsplash.com/photo-1599661046289-e31897846e41?w=400&q=80','rajasthan')">
+      <img class="dest-img" src="https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80" alt="Rajasthan" loading="lazy"/>
+      <div class="dest-badge">Heritage</div>
+      <div class="dest-body">
+        <h3>Rajasthan</h3>
+        <div class="meta">🏰 Forts · Deserts · Royal Culture</div>
+        <div class="dest-footer">
+          <div><div class="price-from">Hotels from</div><div class="price-val">₹1,599/night</div></div>
+          <div class="rating-display">⭐ <span id="avg-rajasthan">4.9</span></div>
+        </div>
+        <div class="star-rating-widget">
+          <div class="stars-input" data-id="rajasthan" onmouseleave="clearHover('rajasthan')">
+            <span onclick="setRating('rajasthan',1,event)" onmouseover="hoverRating('rajasthan',1)">★</span>
+            <span onclick="setRating('rajasthan',2,event)" onmouseover="hoverRating('rajasthan',2)">★</span>
+            <span onclick="setRating('rajasthan',3,event)" onmouseover="hoverRating('rajasthan',3)">★</span>
+            <span onclick="setRating('rajasthan',4,event)" onmouseover="hoverRating('rajasthan',4)">★</span>
+            <span onclick="setRating('rajasthan',5,event)" onmouseover="hoverRating('rajasthan',5)">★</span>
+          </div>
+          <span class="rating-count" id="count-rajasthan">(3,105 ratings)</span>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card" onclick="openBooking('Kerala Backwater Retreat','1099','https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80','kerala')">
+      <img class="dest-img" src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80" alt="Kerala" loading="lazy"/>
+      <div class="dest-badge">Nature</div>
+      <div class="dest-body">
+        <h3>Kerala</h3>
+        <div class="meta">🛶 Backwaters · Spices · Wellness</div>
+        <div class="dest-footer">
+          <div><div class="price-from">Hotels from</div><div class="price-val">₹1,099/night</div></div>
+          <div class="rating-display">⭐ <span id="avg-kerala">4.8</span></div>
+        </div>
+        <div class="star-rating-widget">
+          <div class="stars-input" data-id="kerala" onmouseleave="clearHover('kerala')">
+            <span onclick="setRating('kerala',1,event)" onmouseover="hoverRating('kerala',1)">★</span>
+            <span onclick="setRating('kerala',2,event)" onmouseover="hoverRating('kerala',2)">★</span>
+            <span onclick="setRating('kerala',3,event)" onmouseover="hoverRating('kerala',3)">★</span>
+            <span onclick="setRating('kerala',4,event)" onmouseover="hoverRating('kerala',4)">★</span>
+            <span onclick="setRating('kerala',5,event)" onmouseover="hoverRating('kerala',5)">★</span>
+          </div>
+          <span class="rating-count" id="count-kerala">(2,678 ratings)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="packages-section" id="packages">
+  <div class="section-header">
+    <div class="section-tag">🎒 Best Value</div>
+    <h2>Holiday Packages</h2>
+    <p>All-inclusive deals with flights, hotel, and activities bundled together</p>
+  </div>
+  <div class="cards-grid">
+    <div class="pkg-card">
+      <div class="pkg-banner"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80" alt="Goa" loading="lazy"/><div class="pkg-banner-overlay"><span>Goa Beach Escape</span></div></div>
+      <div class="pkg-body">
+        <h3>Goa Beach Escape — 4N/5D</h3>
+        <div class="pkg-features"><span class="feature-pill">✈️ Flights</span><span class="feature-pill">🏨 3-Star Hotel</span><span class="feature-pill">🍽️ Breakfast</span><span class="feature-pill">🚕 Transfers</span></div>
+        <div class="pkg-footer">
+          <div class="pkg-price"><small>Per person</small><strong>₹18,499</strong></div>
+          <button class="btn-book" onclick="openBooking('Goa Beach Escape 4N/5D','18499','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80','pkg-goa');event.stopPropagation()">Book Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-banner"><img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80" alt="Kerala" loading="lazy"/><div class="pkg-banner-overlay"><span>Kerala Backwater Bliss</span></div></div>
+      <div class="pkg-body">
+        <h3>Kerala Backwater Bliss — 5N/6D</h3>
+        <div class="pkg-features"><span class="feature-pill">✈️ Flights</span><span class="feature-pill">🛶 Houseboat</span><span class="feature-pill">🍽️ All Meals</span><span class="feature-pill">🧘 Ayurveda</span></div>
+        <div class="pkg-footer">
+          <div class="pkg-price"><small>Per person</small><strong>₹24,999</strong></div>
+          <button class="btn-book" onclick="openBooking('Kerala Backwater Bliss 5N/6D','24999','https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80','pkg-kerala');event.stopPropagation()">Book Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-banner"><img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80" alt="Manali" loading="lazy"/><div class="pkg-banner-overlay"><span>Manali Snow Adventure</span></div></div>
+      <div class="pkg-body">
+        <h3>Manali Snow Adventure — 6N/7D</h3>
+        <div class="pkg-features"><span class="feature-pill">🚌 Volvo Bus</span><span class="feature-pill">🏨 4-Star Hotel</span><span class="feature-pill">🍽️ Breakfast</span><span class="feature-pill">🎿 Activities</span></div>
+        <div class="pkg-footer">
+          <div class="pkg-price"><small>Per person</small><strong>₹15,999</strong></div>
+          <button class="btn-book" onclick="openBooking('Manali Snow Adventure 6N/7D','15999','https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=400&q=80','pkg-manali');event.stopPropagation()">Book Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-banner"><img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80" alt="Rajasthan" loading="lazy"/><div class="pkg-banner-overlay"><span>Rajasthan Royal Tour</span></div></div>
+      <div class="pkg-body">
+        <h3>Rajasthan Royal Tour — 7N/8D</h3>
+        <div class="pkg-features"><span class="feature-pill">✈️ Flights</span><span class="feature-pill">🏰 Heritage Hotel</span><span class="feature-pill">🍽️ All Meals</span><span class="feature-pill">🐪 Camel Safari</span></div>
+        <div class="pkg-footer">
+          <div class="pkg-price"><small>Per person</small><strong>₹32,499</strong></div>
+          <button class="btn-book" onclick="openBooking('Rajasthan Royal Tour 7N/8D','32499','https://images.unsplash.com/photo-1599661046289-e31897846e41?w=400&q=80','pkg-rajasthan');event.stopPropagation()">Book Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOTELS -->
+<section id="hotels">
+  <div class="section-header">
+    <div class="section-tag">🏨 Top Rated</div>
+    <h2>Featured Hotels</h2>
+    <p>Handpicked properties with amazing reviews and unbeatable prices</p>
+  </div>
+  <div class="hotels-grid">
+    <div class="hotel-card" onclick="openBooking('The Grand Leela, Goa','3499','https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80','hotel-leela')">
+      <div class="hotel-img"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=300&q=80" alt="Leela Goa" loading="lazy"/></div>
+      <div class="hotel-body">
+        <div><h3>The Grand Leela, Goa</h3><div class="hotel-location">📍 Candolim Beach, North Goa</div><div class="stars">★★★★★</div></div>
+        <div class="hotel-amenities"><span class="amenity">🏊 Pool</span><span class="amenity">🍳 Breakfast</span><span class="amenity">📶 Free WiFi</span><span class="amenity">🅿️ Parking</span></div>
+        <div class="hotel-footer"><div class="hotel-price"><strong>₹3,499</strong><small>/night onwards</small></div><button class="btn-book" onclick="openBooking('The Grand Leela, Goa','3499','https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80','hotel-leela');event.stopPropagation()">View Rooms</button></div>
+      </div>
+    </div>
+    <div class="hotel-card" onclick="openBooking('Taj Lake Palace, Udaipur','28000','https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=400&q=80','hotel-taj')">
+      <div class="hotel-img"><img src="https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=300&q=80" alt="Taj Palace" loading="lazy"/></div>
+      <div class="hotel-body">
+        <div><h3>Taj Lake Palace, Udaipur</h3><div class="hotel-location">📍 Lake Pichola, Udaipur</div><div class="stars">★★★★★</div></div>
+        <div class="hotel-amenities"><span class="amenity">🛥️ Boat Access</span><span class="amenity">🍽️ Fine Dining</span><span class="amenity">💆 Spa</span></div>
+        <div class="hotel-footer"><div class="hotel-price"><strong>₹28,000</strong><small>/night onwards</small></div><button class="btn-book" onclick="openBooking('Taj Lake Palace, Udaipur','28000','https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=400&q=80','hotel-taj');event.stopPropagation()">View Rooms</button></div>
+      </div>
+    </div>
+    <div class="hotel-card" onclick="openBooking('Snow Valley Resort, Manali','2199','https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80','hotel-snow')">
+      <div class="hotel-img"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&q=80" alt="Snow Valley" loading="lazy"/></div>
+      <div class="hotel-body">
+        <div><h3>Snow Valley Resort, Manali</h3><div class="hotel-location">📍 Old Manali Road, Manali</div><div class="stars">★★★★</div></div>
+        <div class="hotel-amenities"><span class="amenity">❄️ Mountain View</span><span class="amenity">🍳 Breakfast</span><span class="amenity">🔥 Bonfire</span></div>
+        <div class="hotel-footer"><div class="hotel-price"><strong>₹2,199</strong><small>/night onwards</small></div><button class="btn-book" onclick="openBooking('Snow Valley Resort, Manali','2199','https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80','hotel-snow');event.stopPropagation()">View Rooms</button></div>
+      </div>
+    </div>
+    <div class="hotel-card" onclick="openBooking('Kumarakom Lake Resort, Kerala','12000','https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80','hotel-kmk')">
+      <div class="hotel-img"><img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=300&q=80" alt="Kumarakom" loading="lazy"/></div>
+      <div class="hotel-body">
+        <div><h3>Kumarakom Lake Resort, Kerala</h3><div class="hotel-location">📍 Kottayam, Kerala</div><div class="stars">★★★★★</div></div>
+        <div class="hotel-amenities"><span class="amenity">🛶 Kayaking</span><span class="amenity">🍽️ All Meals</span><span class="amenity">🧘 Yoga</span></div>
+        <div class="hotel-footer"><div class="hotel-price"><strong>₹12,000</strong><small>/night onwards</small></div><button class="btn-book" onclick="openBooking('Kumarakom Lake Resort','12000','https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80','hotel-kmk');event.stopPropagation()">View Rooms</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFERS -->
+<section class="offers-section" id="offers">
+  <div class="section-header"><div class="section-tag">💥 Limited Time</div><h2>Exclusive Deals & Offers</h2></div>
+  <div class="offers-grid">
+    <div class="offer-card primary-offer" onclick="showToast('Coupon FIRST50 copied! Use at checkout.','green')">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80" alt="Beach" loading="lazy"/>
+      <div class="offer-overlay"><div class="offer-text"><h3>Flat 50% OFF<br>on First Booking!</h3><p>Use code FIRST50. Valid for new users only.</p><button class="btn-offer">Grab This Deal →</button></div></div>
+    </div>
+    <div class="offer-card secondary-offer" onclick="showToast('Exploring weekend escapes...')">
+      <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=80" alt="Flights" loading="lazy"/>
+      <div class="offer-overlay"><div class="offer-text"><h3>Weekend Escapes<br>From ₹4,999!</h3><p>Short trip? Flights + hotel for a quick getaway.</p><button class="btn-offer">Explore Now →</button></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why-section" id="why">
+  <div class="section-header">
+    <div class="section-tag">Why TripWave?</div>
+    <h2>Travel Smarter,<br>Pay Lesser</h2>
+    <p>Millions trust us for hassle-free travel planning</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card"><div class="why-icon">💸</div><h3>Best Price Guarantee</h3><p>Find it cheaper elsewhere? We'll match and beat any price, no questions asked.</p></div>
+    <div class="why-card"><div class="why-icon">🔒</div><h3>100% Secure Payments</h3><p>All transactions encrypted with PCI-DSS compliance. Your money is always safe.</p></div>
+    <div class="why-card"><div class="why-icon">📞</div><h3>24/7 Customer Support</h3><p>Our travel experts are available around the clock via chat, call, or email.</p></div>
+    <div class="why-card"><div class="why-icon">🔁</div><h3>Easy Cancellation</h3><p>Plans changed? Cancel for free up to 24 hours before check-in on most bookings.</p></div>
+    <div class="why-card"><div class="why-icon">⚡</div><h3>Instant Confirmation</h3><p>Get your voucher instantly. No waiting, no follow-up calls needed.</p></div>
+    <div class="why-card"><div class="why-icon">🎁</div><h3>Loyalty Rewards</h3><p>Earn TripCoins on every booking and redeem them for discounts on future trips.</p></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-header"><div class="section-tag">❤️ Travellers Love Us</div><h2>Real Stories, Real Trips</h2></div>
+  <div class="testimonials-grid">
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Booked a Goa package last minute and TripWave got me an amazing deal. The hotel was stunning and transfers were smooth. Will never use any other app!"</div><div class="testi-author"><div class="testi-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Priya" loading="lazy"/></div><div><div class="testi-name">Priya Sharma</div><div class="testi-trip">Goa, 3N Package</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"The Rajasthan tour package was everything I dreamed of. Heritage hotels, camel safari, royal dinners — all perfectly arranged through TripWave!"</div><div class="testi-author"><div class="testi-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Arjun" loading="lazy"/></div><div><div class="testi-name">Arjun Mehta</div><div class="testi-trip">Rajasthan, 7N Package</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Used TripWave for our honeymoon in Kerala. The houseboat experience was magical and the customer support team was incredibly helpful throughout!"</div><div class="testi-author"><div class="testi-avatar"><img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=100&q=80" alt="Couple" loading="lazy"/></div><div><div class="testi-name">Meera & Rohan</div><div class="testi-trip">Kerala Honeymoon Package</div></div></div></div>
+  </div>
+</section>
+
+<!-- APP BANNER -->
+<div class="app-banner">
+  <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1400&q=80" alt="Travel" loading="lazy"/>
+  <div class="app-banner-overlay">
+    <div class="app-text">
+      <h2>Take TripWave Everywhere</h2>
+      <p>Download our app for exclusive mobile-only deals, real-time trip updates, and offline booking access.</p>
+      <div class="app-btns">
+        <button class="btn-app" onclick="showToast('Redirecting to App Store...')">🍎 App Store</button>
+        <button class="btn-app" onclick="showToast('Redirecting to Play Store...')">🤖 Google Play</button>
+      </div>
+    </div>
+    <div class="app-emoji">📱</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo"><div class="logo-icon">✈️</div><span class="logo-text">Trip<span>Wave</span></span></a>
+      <p>India's most trusted travel platform. We make every trip memorable, from weekend getaways to grand adventures.</p>
+    </div>
+    <div class="footer-col"><h4>Travel</h4><ul><li><a href="#">Hotels</a></li><li><a href="#">Flights</a></li><li><a href="#">Holiday Packages</a></li><li><a href="#">Homestays</a></li><li><a href="#">Train Booking</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="#">Blog</a></li><li><a href="#">Investor Relations</a></li></ul></div>
+    <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Centre</a></li><li><a href="#">Cancellation Policy</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 TripWave Technologies Pvt. Ltd. All rights reserved.</span>
+    <div class="social-links">
+      <a class="social-btn" onclick="showToast('Opening Facebook...')">📘</a>
+      <a class="social-btn" onclick="showToast('Opening Instagram...')">📸</a>
+      <a class="social-btn" onclick="showToast('Opening Twitter...')">🐦</a>
+      <a class="social-btn" onclick="showToast('Opening YouTube...')">▶️</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════ AUTH MODAL ═══════════ -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+    <div id="loginView">
+      <h2>Welcome Back! 👋</h2>
+      <p class="modal-subtitle">Sign in to access your bookings and exclusive deals</p>
+      <div class="modal-field"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"/></div>
+      <div class="modal-field"><label>Password</label><input type="password" id="loginPass" placeholder="Your password"/></div>
+      <button class="btn-primary-full" onclick="fakeLogin()">Sign In</button>
+      <div class="modal-divider">or continue with</div>
+      <button class="btn-primary-full" style="background:#fff;color:#333;border:1.5px solid var(--border);margin-bottom:6px" onclick="showToast('Google login coming soon!')">🔵 Continue with Google</button>
+      <div class="modal-switch">Don't have an account? <a onclick="switchModal('signup')">Sign Up</a></div>
+    </div>
+    <div id="signupView" style="display:none">
+      <h2>Join TripWave 🌍</h2>
+      <p class="modal-subtitle">Create your account and start booking amazing trips</p>
+      <div class="modal-field"><label>Full Name</label><input type="text" id="signupName" placeholder="Your name"/></div>
+      <div class="modal-field"><label>Email</label><input type="email" id="signupEmail" placeholder="you@example.com"/></div>
+      <div class="modal-field"><label>Password</label><input type="password" id="signupPass" placeholder="Create a password"/></div>
+      <button class="btn-primary-full" onclick="fakeSignup()">Create Account</button>
+      <div class="modal-switch">Already have an account? <a onclick="switchModal('login')">Sign In</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ BOOKING MODAL ═══════════ -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal wide">
+    <button class="modal-close" onclick="closeModal('bookingModal')">✕</button>
+    <h2>Complete Your Booking</h2>
+    <p class="modal-subtitle">Secure your spot — takes less than 2 minutes</p>
+
+    <div class="booking-header" id="bookingHeader">
+      <img id="bookingImg" src="" alt=""/>
+      <div class="booking-header-info">
+        <h3 id="bookingName"></h3>
+        <p>Standard Room / Package</p>
+        <div class="booking-price" id="bookingPriceDisplay"></div>
+      </div>
+    </div>
+
+    <div class="bk-section-title">👤 Guest Details</div>
+    <div class="fields-row">
+      <div class="modal-field"><label>First Name</label><input type="text" id="bkFirst" placeholder="Rahul"/></div>
+      <div class="modal-field"><label>Last Name</label><input type="text" id="bkLast" placeholder="Verma"/></div>
+    </div>
+    <div class="fields-row">
+      <div class="modal-field"><label>Email</label><input type="email" id="bkEmail" placeholder="rahul@email.com"/></div>
+      <div class="modal-field"><label>Phone</label><input type="tel" id="bkPhone" placeholder="+91 98765 43210"/></div>
+    </div>
+
+    <div class="bk-section-title">📅 Travel Dates</div>
+    <div class="fields-row">
+      <div class="modal-field"><label>Check-in / Start</label><input type="date" id="bkCheckin"/></div>
+      <div class="modal-field"><label>Check-out / End</label><input type="date" id="bkCheckout"/></div>
+    </div>
+    <div class="modal-field"><label>Travellers</label><select id="bkTravellers"><option>1 Adult</option><option selected>2 Adults</option><option>2 Adults + 1 Child</option><option>2 Adults + 2 Children</option><option>3+ Adults</option></select></div>
+
+    <div class="bk-section-title">💳 Payment Method</div>
+    <div class="payment-methods">
+      <button class="pay-method selected" onclick="selectPayment('card')">💳 Card</button>
+      <button class="pay-method" onclick="selectPayment('upi')">📱 UPI / QR Code</button>
+      <button class="pay-method" onclick="selectPayment('netbanking')">🏦 Net Banking</button>
+      <button class="pay-method" onclick="selectPayment('wallet')">👛 Wallet / EMI</button>
+    </div>
+
+    <!-- CARD FIELDS -->
+    <div class="extra-fields show" id="cardFields">
+      <div class="modal-field"><label>Card Number</label><input type="text" id="bkCardNum" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)"/></div>
+      <div class="fields-row">
+        <div class="modal-field"><label>Expiry</label><input type="text" placeholder="MM/YY" maxlength="5"/></div>
+        <div class="modal-field"><label>CVV</label><input type="text" placeholder="•••" maxlength="3"/></div>
+      </div>
+      <div class="modal-field"><label>Name on Card</label><input type="text" placeholder="RAHUL VERMA"/></div>
+    </div>
+
+    <!-- UPI + QR CODE FIELDS -->
+    <div class="extra-fields" id="upiFields">
+      <div class="modal-field"><label>Your UPI ID (optional)</label><input type="text" id="bkUpiId" placeholder="yourname@paytm  or  9876543210@upi"/></div>
+      <div class="qr-section show" id="qrSection">
+        <h4>📲 Scan & Pay</h4>
+        <p>Scan this QR code with any UPI app to pay instantly</p>
+        <div id="qrcode"></div>
+        <div class="qr-upi-id">Pay to: <strong>tripwave@upi</strong> (TripWave Technologies Pvt. Ltd.)</div>
+        <div class="qr-apps">
+          <button class="qr-app-btn" onclick="showToast('Opening Google Pay...')">🟢 GPay</button>
+          <button class="qr-app-btn" onclick="showToast('Opening PhonePe...')">🟣 PhonePe</button>
+          <button class="qr-app-btn" onclick="showToast('Opening Paytm...')">🔵 Paytm</button>
+          <button class="qr-app-btn" onclick="showToast('Opening BHIM...')">🟠 BHIM</button>
+        </div>
+        <div class="qr-timer" id="qrTimer">⏱ QR valid for: <span id="qrCountdown">10:00</span></div>
+      </div>
+    </div>
+
+    <!-- NET BANKING -->
+    <div class="extra-fields" id="netFields">
+      <div class="modal-field"><label>Select Bank</label><select><option>State Bank of India</option><option>HDFC Bank</option><option>ICICI Bank</option><option>Axis Bank</option><option>Kotak Mahindra Bank</option><option>Punjab National Bank</option><option>Other Bank</option></select></div>
+    </div>
+
+    <!-- WALLET / EMI -->
+    <div class="extra-fields" id="walletFields">
+      <div class="modal-field"><label>Select Wallet / EMI Option</label><select><option>Paytm Wallet</option><option>PhonePe Wallet</option><option>Amazon Pay</option><option>No Cost EMI – 3 months</option><option>No Cost EMI – 6 months</option><option>No Cost EMI – 12 months</option></select></div>
+    </div>
+
+    <!-- PRICE BREAKDOWN -->
+    <div class="price-breakdown">
+      <div class="price-row"><span>Base Price</span><span id="bkBase">-</span></div>
+      <div class="price-row"><span>Taxes & Fees (5%)</span><span id="bkTax">-</span></div>
+      <div class="price-row discount-row" id="discountRow" style="display:none"><span>FIRST50 Discount (50%)</span><span id="bkDiscount">-</span></div>
+      <div class="price-row"><span>Convenience Fee</span><span>₹0</span></div>
+      <div class="price-row total"><span>💰 Total Payable</span><span id="bkTotal">-</span></div>
+    </div>
+
+    <div class="modal-field" style="margin-bottom:6px">
+      <label>Coupon Code</label>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="couponInput" placeholder="Enter coupon (try FIRST50)" style="flex:1"/>
+        <button onclick="applyCoupon()" style="background:var(--secondary);color:white;border:none;padding:11px 16px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;white-space:nowrap;font-size:0.85rem">Apply</button>
+      </div>
+    </div>
+
+    <button class="btn-primary-full" onclick="completeBooking()" style="font-size:1rem;padding:15px;background:linear-gradient(135deg,#FF5722,#E64A19);margin-top:10px">
+      🔒 Confirm & Pay Securely
+    </button>
+    <p style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:8px">🛡️ 256-bit SSL · PCI-DSS Compliant · Instant Confirmation · Free Cancellation</p>
+  </div>
+</div>
+
+<!-- ═══════════ SUCCESS MODAL ═══════════ -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal" style="text-align:center;max-width:420px">
+    <div style="font-size:4rem;margin-bottom:12px">🎉</div>
+    <h2 style="color:var(--green)">Booking Confirmed!</h2>
+    <p class="modal-subtitle">Your trip is locked in. Confirmation sent to your email.</p>
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:14px;margin:16px 0;text-align:left">
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:4px">Booking Reference</div>
+      <div style="font-size:1.3rem;font-weight:800;color:var(--green);letter-spacing:3px" id="bookingRef"></div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-top:8px">Amount Paid: <strong id="successAmt" style="color:var(--text)"></strong></div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:16px">📋 View &amp; manage your booking in <strong>My Bookings</strong></p>
+    <button class="btn-primary-full" onclick="closeModal('successModal')" style="background:var(--green)">Done ✓</button>
+  </div>
+</div>
+
+<!-- ═══════════ MY BOOKINGS MODAL ═══════════ -->
+<div class="modal-overlay" id="bookingsModal">
+  <div class="modal wide">
+    <button class="modal-close" onclick="closeModal('bookingsModal')">✕</button>
+    <h2>📋 My Bookings</h2>
+    <p class="modal-subtitle">All your trips in one place</p>
+    <div class="bookings-list" id="bookingsList"></div>
+  </div>
+</div>
+
+<!-- ═══════════ CANCEL CONFIRM MODAL ═══════════ -->
+<div class="modal-overlay" id="cancelModal">
+  <div class="modal" style="max-width:420px">
+    <button class="modal-close" onclick="closeModal('cancelModal')">✕</button>
+    <div style="font-size:2.5rem;text-align:center;margin-bottom:12px">⚠️</div>
+    <h2 style="text-align:center">Cancel Booking?</h2>
+    <p class="modal-subtitle" style="text-align:center">This action cannot be undone</p>
+    <div style="background:#f7f8fc;border-radius:10px;padding:12px;margin-bottom:12px">
+      <div style="font-size:0.82rem;color:var(--muted)">Booking</div>
+      <div style="font-size:0.95rem;font-weight:700" id="cancelBookingName"></div>
+      <div style="font-size:0.78rem;font-family:monospace;color:var(--muted);margin-top:2px" id="cancelBookingRef"></div>
+    </div>
+    <div class="cancel-info">
+      <p>📋 <strong>Cancellation Policy:</strong><br>
+      • Cancel 24+ hrs before check-in → <strong>Full Refund</strong><br>
+      • Cancel 12–24 hrs before check-in → <strong>50% Refund</strong><br>
+      • Cancel within 12 hrs → <strong>No Refund</strong></p>
+      <div class="refund-amount" id="cancelRefundAmt"></div>
+    </div>
+    <button class="btn-danger-full" onclick="confirmCancel()">Yes, Cancel & Refund</button>
+    <button class="btn-outline-full" onclick="closeModal('cancelModal')">Keep My Booking</button>
+  </div>
+</div>
+
+<!-- ═══════════ REFUND SUCCESS MODAL ═══════════ -->
+<div class="modal-overlay" id="refundModal">
+  <div class="modal" style="text-align:center;max-width:400px">
+    <div style="font-size:3.5rem;margin-bottom:12px">💸</div>
+    <h2 style="color:#1d4ed8">Booking Cancelled</h2>
+    <p class="modal-subtitle">Your refund is being processed</p>
+    <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:12px;padding:14px;margin:16px 0;text-align:left">
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:4px">Refund Amount</div>
+      <div style="font-size:1.4rem;font-weight:800;color:#1d4ed8" id="refundAmount"></div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-top:6px">Estimated credit: <strong>5–7 business days</strong> to your original payment method.</div>
+    </div>
+    <div style="font-size:0.78rem;color:var(--muted);margin-bottom:16px">Refund ID: <strong id="refundId" style="font-family:monospace;color:var(--text)"></strong></div>
+    <button class="btn-primary-full" onclick="closeModal('refundModal')" style="background:#1d4ed8">Got It</button>
+  </div>
+</div>
+
+<!-- ═══════════ ADMIN / DATABASE PANEL ═══════════ -->
+<div class="admin-panel">
+  <button class="admin-toggle" onclick="toggleAdmin()">🗄️ Admin DB</button>
+</div>
+
+<div class="admin-drawer" id="adminDrawer">
+  <div class="admin-header">
+    <h3>🗄️ TripWave Database Panel</h3>
+    <button class="modal-close" style="position:static" onclick="toggleAdmin()">✕</button>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="showAdminTab('overview',this)">📊 Overview</button>
+    <button class="admin-tab" onclick="showAdminTab('bookings',this)">📋 All Bookings</button>
+    <button class="admin-tab" onclick="showAdminTab('users',this)">👥 Users</button>
+    <button class="admin-tab" onclick="showAdminTab('ratings',this)">⭐ Ratings</button>
+  </div>
+  <div class="admin-content" id="adminContent"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<script>
+// ═══════════════════════════════════════
+// DATABASE (localStorage)
+// ═══════════════════════════════════════
+const DB = {
+  get: (key) => { try { return JSON.parse(localStorage.getItem('tw_' + key)) || [] } catch(e) { return [] } },
+  set: (key, val) => localStorage.setItem('tw_' + key, JSON.stringify(val)),
+  push: (key, item) => { const arr = DB.get(key); arr.push(item); DB.set(key, arr); return arr; }
+};
+
+// Init default data if empty
+if (!DB.get('bookings').length) DB.set('bookings', []);
+if (!DB.get('users').length) DB.set('users', []);
+if (!DB.get('ratings').length) DB.set('ratings', [
+  {dest:'goa',    sum:11243, count:2341},
+  {dest:'manali', sum:8900,  count:1892},
+  {dest:'rajasthan', sum:15201, count:3105},
+  {dest:'kerala', sum:12854, count:2678}
+]);
+if (!DB.get('currentUser').length) DB.set('currentUser', null);
+
+// ═══════════════════════════════════════
+// DATES
+// ═══════════════════════════════════════
+const today = new Date();
+const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate()+1);
+const nextWeek = new Date(today); nextWeek.setDate(nextWeek.getDate()+7);
+document.getElementById('checkin').valueAsDate = tomorrow;
+document.getElementById('checkout').valueAsDate = nextWeek;
+document.getElementById('bkCheckin').valueAsDate = tomorrow;
+document.getElementById('bkCheckout').valueAsDate = nextWeek;
+
+// ═══════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════
+function setTab(btn, type) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const f = document.getElementById('searchFields');
+  const m = {
+    hotels:`<div class="field-group"><label>Destination / Hotel</label><input type="text" placeholder="Where are you going?"/></div><div class="field-group"><label>Check-in</label><input type="date"/></div><div class="field-group"><label>Check-out</label><input type="date"/></div><button class="btn-search" onclick="handleSearch()">🔍 Search</button>`,
+    flights:`<div class="field-group"><label>From</label><input type="text" placeholder="Departure city"/></div><div class="field-group"><label>To</label><input type="text" placeholder="Destination city"/></div><div class="field-group"><label>Date</label><input type="date"/></div><button class="btn-search" onclick="handleSearch()">🔍 Search Flights</button>`,
+    packages:`<div class="field-group"><label>Destination</label><input type="text" placeholder="Dream destination..."/></div><div class="field-group"><label>Month</label><select><option>June 2025</option><option>July 2025</option><option>August 2025</option></select></div><div class="field-group"><label>Duration</label><select><option>3-5 Days</option><option>5-7 Days</option><option>7-10 Days</option></select></div><button class="btn-search" onclick="handleSearch()">🔍 Find Package</button>`,
+    holidays:`<div class="field-group"><label>Holiday Type</label><select><option>Beach</option><option>Mountains</option><option>Heritage</option><option>Adventure</option><option>Honeymoon</option></select></div><div class="field-group"><label>Budget</label><select><option>Under ₹15,000</option><option>₹15K–₹30K</option><option>₹30K–₹60K</option><option>₹60K+</option></select></div><div class="field-group"><label>Travellers</label><select><option>1</option><option>2</option><option>3-5</option><option>6+</option></select></div><button class="btn-search" onclick="handleSearch()">🔍 Find Holidays</button>`
+  };
+  f.innerHTML = m[type];
+}
+function handleSearch() {
+  showToast('🔍 Searching best deals for you...');
+  setTimeout(()=>showToast('✅ 42 results found! Scroll down to explore.','green'),1800);
+}
+
+// ═══════════════════════════════════════
+// STAR RATINGS (with DB persistence)
+// ═══════════════════════════════════════
+function getRatings(id) {
+  const all = DB.get('ratings');
+  return all.find(r=>r.dest===id) || {dest:id, sum:0, count:0};
+}
+function saveRating(id, val) {
+  let all = DB.get('ratings');
+  let r = all.find(r=>r.dest===id);
+  if (!r) { r={dest:id,sum:0,count:0}; all.push(r); }
+  r.sum += val; r.count += 1;
+  DB.set('ratings', all);
+  // Also save individual rating
+  DB.push('ratings_log', {dest:id, value:val, time:new Date().toISOString()});
+}
+function renderStars(id) {
+  const r = getRatings(id);
+  const avg = r.count > 0 ? r.sum / r.count : 0;
+  const stars = document.querySelectorAll(`.stars-input[data-id="${id}"] span`);
+  stars.forEach((s,i)=>s.classList.toggle('active', i < Math.round(avg)));
+  const avgEl = document.getElementById('avg-'+id);
+  const cntEl = document.getElementById('count-'+id);
+  if (avgEl) avgEl.textContent = avg.toFixed(1);
+  if (cntEl) cntEl.textContent = `(${r.count.toLocaleString('en-IN')} ratings)`;
+}
+function hoverRating(id, val) {
+  document.querySelectorAll(`.stars-input[data-id="${id}"] span`).forEach((s,i)=>s.classList.toggle('hover', i<val));
+}
+function clearHover(id) {
+  document.querySelectorAll(`.stars-input[data-id="${id}"] span`).forEach(s=>s.classList.remove('hover'));
+}
+function setRating(id, val, e) {
+  if(e) e.stopPropagation();
+  saveRating(id, val);
+  renderStars(id);
+  showToast(`⭐ Thanks! You rated ${id.charAt(0).toUpperCase()+id.slice(1)} ${val} star${val>1?'s':''}!`,'green');
+}
+['goa','manali','rajasthan','kerala'].forEach(renderStars);
+
+// ═══════════════════════════════════════
+// BOOKING MODAL
+// ═══════════════════════════════════════
+let currentBookingData = {};
+let couponApplied = false;
+let qrTimer = null;
+
+function openBooking(name, price, img, id) {
+  currentBookingData = { name, price: parseInt(price), img, id };
+  couponApplied = false;
+  document.getElementById('couponInput').value = '';
+  document.getElementById('discountRow').style.display = 'none';
+  document.getElementById('bookingName').textContent = name;
+  document.getElementById('bookingImg').src = img;
+  const p = parseInt(price);
+  document.getElementById('bookingPriceDisplay').textContent = '₹' + p.toLocaleString('en-IN');
+  updatePriceBreakdown(p);
+  // Reset payment to card
+  selectPayment('card');
+  document.getElementById('bookingModal').classList.add('open');
+}
+
+function updatePriceBreakdown(base) {
+  const discount = couponApplied ? Math.round(base * 0.5) : 0;
+  const taxBase = base - discount;
+  const tax = Math.round(taxBase * 0.05);
+  const total = taxBase + tax;
+  document.getElementById('bkBase').textContent = '₹' + base.toLocaleString('en-IN');
+  document.getElementById('bkTax').textContent = '₹' + tax.toLocaleString('en-IN');
+  if (couponApplied) {
+    document.getElementById('discountRow').style.display = 'flex';
+    document.getElementById('bkDiscount').textContent = '−₹' + discount.toLocaleString('en-IN');
+  }
+  document.getElementById('bkTotal').textContent = '₹' + total.toLocaleString('en-IN');
+  currentBookingData.total = total;
+  currentBookingData.tax = tax;
+  currentBookingData.discount = discount;
+}
+
+function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  if (code === 'FIRST50') {
+    couponApplied = true;
+    updatePriceBreakdown(currentBookingData.price);
+    showToast('🎉 Coupon FIRST50 applied! 50% discount!','green');
+  } else if (code === '') {
+    showToast('Please enter a coupon code');
+  } else {
+    showToast('❌ Invalid coupon code','red');
+  }
+}
+
+// PAYMENT METHOD SWITCHING
+let qrGenerated = false;
+function selectPayment(type) {
+  document.querySelectorAll('.pay-method').forEach(b=>b.classList.remove('selected'));
+  const idx = {card:0,upi:1,netbanking:2,wallet:3};
+  document.querySelectorAll('.pay-method')[idx[type]].classList.add('selected');
+  document.getElementById('cardFields').className = 'extra-fields' + (type==='card' ? ' show' : '');
+  document.getElementById('upiFields').className = 'extra-fields' + (type==='upi' ? ' show' : '');
+  document.getElementById('netFields').className = 'extra-fields' + (type==='netbanking' ? ' show' : '');
+  document.getElementById('walletFields').className = 'extra-fields' + (type==='wallet' ? ' show' : '');
+  if (type === 'upi') generateQR();
+  currentBookingData.paymentMethod = type;
+}
+
+function generateQR() {
+  const qrDiv = document.getElementById('qrcode');
+  qrDiv.innerHTML = '';
+  const amt = currentBookingData.total || currentBookingData.price || 1000;
+  const upiUrl = `upi://pay?pa=tripwave@upi&pn=TripWave+Technologies&am=${amt}&cu=INR&tn=TripWave+Booking`;
+  try {
+    new QRCode(qrDiv, {
+      text: upiUrl,
+      width: 160, height: 160,
+      colorDark: '#1A237E', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) {
+    qrDiv.innerHTML = `<div style="width:160px;height:160px;background:#f3f4f6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--muted);text-align:center;padding:12px">QR Code<br><strong>tripwave@upi</strong><br>₹${amt.toLocaleString('en-IN')}</div>`;
+  }
+  startQRTimer();
+}
+
+function startQRTimer() {
+  if (qrTimer) clearInterval(qrTimer);
+  let sec = 600; // 10 min
+  document.getElementById('qrCountdown').textContent = '10:00';
+  qrTimer = setInterval(()=>{
+    sec--;
+    if (sec <= 0) { clearInterval(qrTimer); document.getElementById('qrCountdown').textContent = 'Expired'; generateQR(); return; }
+    const m = Math.floor(sec/60), s = sec%60;
+    document.getElementById('qrCountdown').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+}
+
+function formatCard(input) {
+  let v = input.value.replace(/\D/g,'').substring(0,16);
+  input.value = v.match(/.{1,4}/g)?.join(' ') || v;
+}
+
+// ═══════════════════════════════════════
+// COMPLETE BOOKING → SAVE TO DB
+// ═══════════════════════════════════════
+function completeBooking() {
+  const first = document.getElementById('bkFirst').value.trim();
+  const email = document.getElementById('bkEmail').value.trim();
+  if (!first || !email) { showToast('⚠️ Please fill in guest name and email','red'); return; }
+
+  if (qrTimer) clearInterval(qrTimer);
+
+  const ref = 'TW' + Date.now().toString(36).toUpperCase().slice(-6);
+  const booking = {
+    id: ref,
+    name: currentBookingData.name,
+    img: currentBookingData.img,
+    destId: currentBookingData.id,
+    guestName: (first + ' ' + (document.getElementById('bkLast').value||'')).trim(),
+    email: email,
+    phone: document.getElementById('bkPhone').value||'',
+    checkin: document.getElementById('bkCheckin').value,
+    checkout: document.getElementById('bkCheckout').value,
+    travellers: document.getElementById('bkTravellers').value,
+    basePrice: currentBookingData.price,
+    tax: currentBookingData.tax || 0,
+    discount: currentBookingData.discount || 0,
+    total: currentBookingData.total || currentBookingData.price,
+    paymentMethod: currentBookingData.paymentMethod || 'card',
+    coupon: couponApplied ? 'FIRST50' : null,
+    status: 'confirmed',
+    bookedAt: new Date().toISOString()
+  };
+
+  DB.push('bookings', booking);
+
+  // Upsert user
+  let users = DB.get('users');
+  if (!users.find(u=>u.email===email)) {
+    users.push({email, name:booking.guestName, joinedAt:booking.bookedAt, bookingCount:1});
+  } else {
+    users.find(u=>u.email===email).bookingCount = (users.find(u=>u.email===email).bookingCount||0)+1;
+  }
+  DB.set('users', users);
+  DB.set('currentUser', {email, name:booking.guestName});
+  document.getElementById('btnMyBookings').classList.add('visible');
+
+  closeModal('bookingModal');
+  document.getElementById('bookingRef').textContent = ref;
+  document.getElementById('successAmt').textContent = '₹' + booking.total.toLocaleString('en-IN');
+  document.getElementById('successModal').classList.add('open');
+}
+
+// ═══════════════════════════════════════
+// MY BOOKINGS
+// ═══════════════════════════════════════
+function openMyBookings() {
+  renderBookingsList();
+  document.getElementById('bookingsModal').classList.add('open');
+}
+
+function renderBookingsList() {
+  const list = document.getElementById('bookingsList');
+  const bookings = DB.get('bookings');
+  if (!bookings.length) {
+    list.innerHTML = `<div class="empty-bookings"><div class="emoji">🧳</div><p>No bookings yet.<br>Explore destinations above!</p></div>`;
+    return;
+  }
+  list.innerHTML = bookings.slice().reverse().map(b=>`
+    <div class="booking-item">
+      <img src="${b.img}" alt="" onerror="this.style.display='none'"/>
+      <div class="booking-item-info">
+        <h4>${b.name}</h4>
+        <div class="bk-ref">${b.id}</div>
+        <div class="bk-dates">📅 ${b.checkin||'—'} → ${b.checkout||'—'} · ${b.travellers||'2 Adults'}</div>
+        <div class="bk-amount">₹${(b.total||b.basePrice||0).toLocaleString('en-IN')} · ${b.paymentMethod?.toUpperCase()||'CARD'}</div>
+      </div>
+      <div class="booking-item-actions">
+        <span class="status-badge status-${b.status}">${b.status}</span>
+        <button class="btn-cancel-bk" onclick="openCancel('${b.id}')" ${b.status!=='confirmed'?'disabled':''}>
+          ${b.status==='confirmed'?'Cancel':'Cancelled'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════
+// CANCELLATION & REFUND
+// ═══════════════════════════════════════
+let cancelTargetId = null;
+function openCancel(bookingId) {
+  const bookings = DB.get('bookings');
+  const b = bookings.find(x=>x.id===bookingId);
+  if (!b) return;
+  cancelTargetId = bookingId;
+
+  const refund = Math.round(b.total * 0.95); // full refund (simplified)
+  document.getElementById('cancelBookingName').textContent = b.name;
+  document.getElementById('cancelBookingRef').textContent = b.id;
+  document.getElementById('cancelRefundAmt').textContent = `✅ You will receive: ₹${refund.toLocaleString('en-IN')} refund`;
+
+  closeModal('bookingsModal');
+  document.getElementById('cancelModal').classList.add('open');
+}
+
+function confirmCancel() {
+  const bookings = DB.get('bookings');
+  const b = bookings.find(x=>x.id===cancelTargetId);
+  if (!b) return;
+  const refund = Math.round(b.total * 0.95);
+  b.status = 'refunded';
+  b.cancelledAt = new Date().toISOString();
+  b.refundAmount = refund;
+  DB.set('bookings', bookings);
+
+  const refundId = 'RF' + Date.now().toString(36).toUpperCase().slice(-8);
+  closeModal('cancelModal');
+  document.getElementById('refundAmount').textContent = '₹' + refund.toLocaleString('en-IN');
+  document.getElementById('refundId').textContent = refundId;
+  document.getElementById('refundModal').classList.add('open');
+  showToast('✅ Booking cancelled. Refund initiated!','green');
+}
+
+// ═══════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════
+function fakeLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const name = email.split('@')[0] || 'Traveller';
+  DB.set('currentUser', {email, name});
+  document.getElementById('btnMyBookings').classList.add('visible');
+  closeModal('authModal');
+  showToast(`✅ Welcome back, ${name}!`,'green');
+}
+function fakeSignup() {
+  const name = document.getElementById('signupName').value.trim() || 'Traveller';
+  const email = document.getElementById('signupEmail').value.trim();
+  let users = DB.get('users');
+  if (!users.find(u=>u.email===email)) {
+    DB.push('users', {email, name, joinedAt:new Date().toISOString(), bookingCount:0});
+  }
+  DB.set('currentUser', {email, name});
+  document.getElementById('btnMyBookings').classList.add('visible');
+  closeModal('authModal');
+  showToast(`🎉 Welcome to TripWave, ${name}!`,'green');
+}
+
+// ═══════════════════════════════════════
+// ADMIN PANEL
+// ═══════════════════════════════════════
+function toggleAdmin() {
+  const d = document.getElementById('adminDrawer');
+  d.classList.toggle('open');
+  if (d.classList.contains('open')) showAdminTab('overview', document.querySelector('.admin-tab'));
+}
+function showAdminTab(tab, btn) {
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const c = document.getElementById('adminContent');
+  const bookings = DB.get('bookings');
+  const users = DB.get('users');
+  const ratings = DB.get('ratings');
+  const totalRev = bookings.filter(b=>b.status==='confirmed').reduce((s,b)=>s+(b.total||0),0);
+  const cancelled = bookings.filter(b=>b.status!=='confirmed').length;
+
+  if (tab === 'overview') {
+    c.innerHTML = `
+      <div class="admin-stats">
+        <div class="admin-stat-card"><div class="num">${bookings.length}</div><div class="lbl">Total Bookings</div></div>
+        <div class="admin-stat-card"><div class="num">₹${Math.round(totalRev/1000)}K</div><div class="lbl">Revenue</div></div>
+        <div class="admin-stat-card"><div class="num">${users.length}</div><div class="lbl">Users</div></div>
+        <div class="admin-stat-card"><div class="num">${cancelled}</div><div class="lbl">Cancellations</div></div>
+      </div>
+      <div class="export-btns">
+        <button class="btn-export" onclick="exportCSV()">⬇️ Export CSV</button>
+        <button class="btn-export green" onclick="exportJSON()">⬇️ Export JSON</button>
+        <button class="btn-clear" onclick="clearDB()">🗑️ Clear All Data</button>
+      </div>
+      <h4 style="margin-bottom:10px;font-size:0.88rem;color:var(--muted)">RECENT BOOKINGS</h4>
+      ${renderAdminTable(bookings.slice(-5).reverse())}
+    `;
+  } else if (tab === 'bookings') {
+    c.innerHTML = `
+      <div class="export-btns"><button class="btn-export" onclick="exportCSV()">⬇️ Export CSV</button></div>
+      ${renderAdminTable(bookings.slice().reverse())}
+    `;
+  } else if (tab === 'users') {
+    c.innerHTML = `
+      <table class="db-table">
+        <thead><tr><th>Name</th><th>Email</th><th>Bookings</th><th>Joined</th></tr></thead>
+        <tbody>${users.map(u=>`<tr><td>${u.name||'—'}</td><td>${u.email||'—'}</td><td>${u.bookingCount||0}</td><td>${u.joinedAt?u.joinedAt.slice(0,10):'—'}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px">No users yet</td></tr>'}</tbody>
+      </table>
+    `;
+  } else if (tab === 'ratings') {
+    c.innerHTML = `
+      <table class="db-table">
+        <thead><tr><th>Destination</th><th>Avg Rating</th><th>Total Ratings</th><th>Total Score</th></tr></thead>
+        <tbody>${ratings.map(r=>`<tr><td>${r.dest?.charAt(0).toUpperCase()+r.dest?.slice(1)}</td><td>⭐ ${r.count>0?(r.sum/r.count).toFixed(2):0}</td><td>${r.count.toLocaleString('en-IN')}</td><td>${r.sum.toLocaleString('en-IN')}</td></tr>`).join('')}</tbody>
+      </table>
+    `;
+  }
+}
+function renderAdminTable(bookings) {
+  if (!bookings.length) return '<p style="text-align:center;color:var(--muted);padding:20px">No bookings yet</p>';
+  return `<table class="db-table">
+    <thead><tr><th>Ref</th><th>Property</th><th>Guest</th><th>Check-in</th><th>Amount</th><th>Payment</th><th>Status</th></tr></thead>
+    <tbody>${bookings.map(b=>`
+      <tr>
+        <td style="font-family:monospace;font-size:0.78rem">${b.id}</td>
+        <td>${b.name?.substring(0,22)+'...'||'—'}</td>
+        <td>${b.guestName||b.email||'—'}</td>
+        <td>${b.checkin||'—'}</td>
+        <td>₹${(b.total||0).toLocaleString('en-IN')}</td>
+        <td>${b.paymentMethod?.toUpperCase()||'—'}</td>
+        <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+function exportCSV() {
+  const bookings = DB.get('bookings');
+  if (!bookings.length) { showToast('No data to export'); return; }
+  const headers = ['Ref','Name','Guest','Email','Phone','CheckIn','CheckOut','Travellers','BasePrice','Tax','Discount','Total','Payment','Status','BookedAt'];
+  const rows = bookings.map(b=>[b.id,b.name,b.guestName,b.email,b.phone,b.checkin,b.checkout,b.travellers,b.basePrice,b.tax,b.discount,b.total,b.paymentMethod,b.status,b.bookedAt]);
+  const csv = [headers, ...rows].map(r=>r.map(v=>`"${v||''}"`).join(',')).join('\n');
+  download('tripwave_bookings.csv', csv, 'text/csv');
+  showToast('✅ CSV exported!','green');
+}
+function exportJSON() {
+  const data = { bookings: DB.get('bookings'), users: DB.get('users'), ratings: DB.get('ratings'), exportedAt: new Date().toISOString() };
+  download('tripwave_database.json', JSON.stringify(data, null, 2), 'application/json');
+  showToast('✅ JSON exported!','green');
+}
+function download(filename, content, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], {type}));
+  a.download = filename; a.click();
+}
+function clearDB() {
+  if (confirm('Delete ALL data? This cannot be undone.')) {
+    ['bookings','users','ratings','ratings_log','currentUser'].forEach(k=>localStorage.removeItem('tw_'+k));
+    showToast('🗑️ All data cleared');
+    toggleAdmin(); setTimeout(toggleAdmin, 100);
+  }
+}
+
+// ═══════════════════════════════════════
+// MODAL HELPERS
+// ═══════════════════════════════════════
+function openModal(type) {
+  document.getElementById('authModal').classList.add('open');
+  switchModal(type);
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (id === 'bookingModal' && qrTimer) clearInterval(qrTimer);
+}
+function switchModal(type) {
+  document.getElementById('loginView').style.display = type==='login' ? 'block' : 'none';
+  document.getElementById('signupView').style.display = type==='signup' ? 'block' : 'none';
+}
+
+// Close modals on backdrop click
+['authModal','bookingModal','successModal','bookingsModal','cancelModal','refundModal'].forEach(id=>{
+  document.getElementById(id).addEventListener('click', e=>{
+    if(e.target===document.getElementById(id)) closeModal(id);
+  });
+});
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+let toastTimer;
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast' + (type ? ' '+type : '') + ' show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+// Check if user already logged in
+const cu = DB.get('currentUser');
+if (cu && cu.email) document.getElementById('btnMyBookings').classList.add('visible');
+</script>
+</body>
+</html>
+
