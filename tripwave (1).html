@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TripWave – Explore Together</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1D9E75; --green-dark: #0F6E56; --green-light: #E1F5EE; --green-text: #085041;
+    --bg: #f7f8f6; --card-bg: #ffffff; --border: rgba(0,0,0,0.12);
+    --text: #1a1a1a; --text-muted: #6b7280; --text-hint: #9ca3af;
+    --radius: 12px; --radius-sm: 8px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; }
+  .hero { text-align: center; margin-bottom: 2rem; }
+  .wave-emoji { font-size: 2.5rem; margin-bottom: 0.4rem; }
+  .logo { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: var(--text); letter-spacing: -2px; line-height: 1; }
+  .logo span { color: var(--green); }
+  .tagline { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.4rem; font-style: italic; }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; width: 100%; max-width: 460px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text); }
+  .badge { background: var(--green-light); color: var(--green-text); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 99px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+  .tab { flex: 1; padding: 9px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; background: #f3f4f2; color: var(--text-muted); transition: all 0.15s; }
+  .tab.active { background: var(--green); color: #fff; border-color: var(--green); }
+  .field { margin-bottom: 1.1rem; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 5px; }
+  input, select { width: 100%; padding: 10px 13px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 15px; background: #fff; color: var(--text); outline: none; transition: border 0.15s, box-shadow 0.15s; }
+  input:focus, select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,0.12); }
+  .err { font-size: 12px; color: #dc2626; margin-top: 4px; display: none; }
+  .btn { width: 100%; padding: 13px; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; letter-spacing: 0.3px; margin-top: 0.4rem; transition: background 0.15s, transform 0.1s; }
+  .btn:hover { background: var(--green-dark); }
+  .btn:active { transform: scale(0.98); }
+  .btn-outline { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; margin-top: 0.6rem; transition: background 0.15s; }
+  .btn-outline:hover { background: #f3f4f2; }
+  .divider { text-align: center; color: var(--text-hint); font-size: 13px; margin: 1.2rem 0; position: relative; }
+  .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 43%; height: 1px; background: var(--border); }
+  .divider::before { left: 0; } .divider::after { right: 0; }
+  .success-wrap { text-align: center; padding: 1rem 0; }
+  .success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .success-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--text); margin-bottom: 0.5rem; }
+  .success-msg { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .btn-sm { display: inline-block; padding: 10px 28px; background: var(--green); color: #fff; border: none; border-radius: var(--radius-sm); font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+  .btn-sm:hover { background: var(--green-dark); }
+  .footer { margin-top: 1.5rem; font-size: 12px; color: var(--text-hint); text-align: center; }
+  @media (max-width: 480px) { .logo { font-size: 2.4rem; } .row { grid-template-columns: 1fr; } .card { padding: 1.5rem; } }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="wave-emoji">🌊</div>
+  <div class="logo">Trip<span>Wave</span></div>
+  <div class="tagline">Explore together, remember forever</div>
+</div>
+
+<div class="card" id="main-card">
+  <div class="card-header">
+    <div class="card-title">Join TripWave</div>
+    <span class="badge">✦ Live Now</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('register')">Register</button>
+    <button class="tab" onclick="switchTab('login')">Login</button>
+  </div>
+
+  <div id="register-form">
+    <div class="row">
+      <div class="field"><label for="fname">First name</label><input id="fname" type="text" placeholder="Raj" /></div>
+      <div class="field"><label for="lname">Last name</label><input id="lname" type="text" placeholder="Shah" /></div>
+    </div>
+    <div class="field">
+      <label for="email">Email address</label>
+      <input id="email" type="email" placeholder="raj@example.com" />
+      <div class="err" id="email-err">Valid email address jaroori che</div>
+    </div>
+    <div class="field"><label for="phone">Phone number</label><input id="phone" type="tel" placeholder="+91 98765 43210" /></div>
+    <div class="field"><label for="city">City</label><input id="city" type="text" placeholder="Surat" /></div>
+    <div class="field">
+      <label for="role">I am a...</label>
+      <select id="role">
+        <option value="">Select role</option>
+        <option value="traveler">Traveler 🧳</option>
+        <option value="guide">Travel Guide 🗺️</option>
+        <option value="host">Trip Host 🏕️</option>
+        <option value="photographer">Travel Photographer 📸</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="pass">Password</label>
+      <input id="pass" type="password" placeholder="••••••••" />
+      <div class="err" id="pass-err">Minimum 6 characters joiye</div>
+    </div>
+    <button class="btn" onclick="handleRegister()">Register on TripWave →</button>
+  </div>
+
+  <div id="login-form" style="display:none">
+    <div class="field"><label for="login-email">Email address</label><input id="login-email" type="email" placeholder="raj@example.com" /></div>
+    <div class="field"><label for="login-pass">Password</label><input id="login-pass" type="password" placeholder="••••••••" /></div>
+    <button class="btn" onclick="handleLogin()">Login to TripWave →</button>
+    <div class="divider">or</div>
+    <button class="btn-outline" onclick="switchTab('register')">Don't have an account? Register ↗</button>
+  </div>
+</div>
+
+<div class="card" id="success-card" style="display:none">
+  <div class="success-wrap">
+    <div class="success-icon">🎉</div>
+    <div class="success-title" id="success-heading">Welcome to TripWave!</div>
+    <div class="success-msg" id="success-msg">Taro account successfully create thayo!</div>
+    <button class="btn-sm" onclick="reset()">Back to Home</button>
+  </div>
+</div>
+
+<div class="footer">TripWave &middot; Made with ❤️ in Surat</div>
+
+<script>
+  const registered = JSON.parse(localStorage.getItem('tw_users') || '[]');
+  function save() { localStorage.setItem('tw_users', JSON.stringify(registered)); }
+  function switchTab(t) {
+    document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', i===(t==='register'?0:1)));
+    document.getElementById('register-form').style.display = t==='register' ? '' : 'none';
+    document.getElementById('login-form').style.display = t==='login' ? '' : 'none';
+  }
+  function handleRegister() {
+    const fname=document.getElementById('fname').value.trim(), lname=document.getElementById('lname').value.trim();
+    const email=document.getElementById('email').value.trim(), phone=document.getElementById('phone').value.trim();
+    const city=document.getElementById('city').value.trim(), role=document.getElementById('role').value;
+    const pass=document.getElementById('pass').value;
+    document.getElementById('email-err').style.display='none';
+    document.getElementById('pass-err').style.display='none';
+    let ok=true;
+    if(!email||!email.includes('@')){document.getElementById('email-err').style.display='block';ok=false;}
+    if(pass.length<6){document.getElementById('pass-err').style.display='block';ok=false;}
+    if(!ok) return;
+    if(registered.find(u=>u.email===email)){alert('Aa email thi already account che. Login karo.');switchTab('login');return;}
+    registered.push({fname,lname,email,phone,city,role,pass}); save();
+    document.getElementById('success-heading').textContent='Welcome, '+(fname||'Traveler')+'! 🌊';
+    document.getElementById('success-msg').textContent='Taro TripWave account ready che. '+(city||'Tara shaher')+' thi sharu kariye trip planning!';
+    showSuccess();
+  }
+  function handleLogin() {
+    const email=document.getElementById('login-email').value.trim(), pass=document.getElementById('login-pass').value;
+    const user=registered.find(u=>u.email===email&&u.pass===pass);
+    if(user){
+      document.getElementById('success-heading').textContent='Pacha Aavyo, '+(user.fname||'Traveler')+'! ✈️';
+      document.getElementById('success-msg').textContent='Successfully login thayo. Tari next trip plan karva ready cho?';
+      showSuccess();
+    } else { alert('Email ya password wrong che. Phathi try karo.'); }
+  }
+  function showSuccess() {
+    document.getElementById('main-card').style.display='none';
+    document.getElementById('success-card').style.display='block';
+  }
+  function reset() {
+    document.getElementById('main-card').style.display='block';
+    document.getElementById('success-card').style.display='none';
+    switchTab('register');
+  }
+</script>
+</body>
+</html>
