@@ -1,6 +1,4 @@
-
-
-cat > /home/claude/tripwave_v2.html << 'ENDOFHTML'
+cat > /home/claude/tripwave_v3.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +60,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--secondary)
 .btn-search{background:var(--primary);color:var(--white);border:none;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .btn-search:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,87,34,0.35)}
 
-/* SEARCH RESULTS */
 .search-results-panel{display:none;margin-top:20px;border-top:2px solid var(--border);padding-top:20px}
 .search-results-panel.show{display:block}
 .results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
@@ -75,12 +72,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--secondary)
 .loader-dots span:nth-child(3){animation-delay:0.4s}
 @keyframes bounce{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
 
-/* FLIGHT RESULTS */
-.flight-results-list{display:flex;flex-direction:column;gap:10px;max-height:460px;overflow-y:auto;padding-right:4px}
+.flight-results-list{display:flex;flex-direction:column;gap:10px;max-height:600px;overflow-y:auto;padding-right:4px}
 .flight-card-result{border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:16px;background:white;transition:all 0.2s;cursor:pointer}
 .flight-card-result:hover{border-color:var(--primary);box-shadow:0 4px 16px rgba(255,87,34,0.12);transform:translateY(-1px)}
-.flight-airline-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;background:#f7f8fc;padding:4px;flex-shrink:0}
-.flight-airline-info{min-width:90px}
+.flight-airline-logo-box{width:52px;height:52px;border-radius:10px;background:#f7f8fc;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;border:1px solid var(--border)}
+.flight-airline-info{min-width:100px}
 .flight-airline-name{font-size:0.82rem;font-weight:700;color:var(--text)}
 .flight-number{font-size:0.72rem;color:var(--muted);font-family:monospace}
 .flight-route{display:flex;align-items:center;gap:10px;flex:1}
@@ -91,18 +87,23 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--secondary)
 .flight-duration{font-size:0.74rem;color:var(--muted);font-weight:600}
 .flight-line-bar{width:100%;display:flex;align-items:center;gap:2px}
 .flight-line-bar .dash{flex:1;height:1.5px;background:#d1d5db}
-.flight-plane-icon{font-size:0.85rem}
 .flight-stops{font-size:0.7rem;color:var(--orange);font-weight:600}
 .flight-stops.nonstop{color:var(--green)}
 .flight-price-info{text-align:right;min-width:90px;flex-shrink:0}
 .flight-price-info .price{font-size:1.15rem;font-weight:800;color:var(--primary)}
 .flight-price-info .per{font-size:0.72rem;color:var(--muted)}
 .flight-price-info .seats{font-size:0.7rem;color:var(--red);font-weight:600;margin-top:2px}
-.flight-class-badge{font-size:0.7rem;background:#f0f4ff;color:var(--secondary);padding:2px 8px;border-radius:999px;font-weight:600;margin-top:4px}
-.btn-book-flight{background:var(--primary);color:white;border:none;padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s}
+.flight-class-badge{font-size:0.7rem;background:#f0f4ff;color:var(--secondary);padding:2px 8px;border-radius:999px;font-weight:600;margin-top:4px;display:inline-block}
+.btn-book-flight{background:var(--primary);color:white;border:none;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s}
 .btn-book-flight:hover{background:var(--primary-dark)}
+.flight-tag{font-size:0.68rem;padding:2px 7px;border-radius:4px;font-weight:700;margin-top:3px;display:inline-block}
+.flight-tag.cheapest{background:#dcfce7;color:#16a34a}
+.flight-tag.fastest{background:#dbeafe;color:#1d4ed8}
+.flight-tag.popular{background:#fef3c7;color:#d97706}
+.flight-filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filter-btn{padding:5px 14px;border-radius:999px;border:1.5px solid var(--border);background:white;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;color:var(--muted)}
+.filter-btn.active,.filter-btn:hover{border-color:var(--primary);color:var(--primary);background:rgba(255,87,34,0.05)}
 
-/* HOTEL SEARCH RESULTS */
 .hotel-results-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-height:500px;overflow-y:auto;padding-right:4px}
 .hotel-result-card{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s;background:white;display:flex;flex-direction:column}
 .hotel-result-card:hover{border-color:var(--primary);box-shadow:0 4px 16px rgba(255,87,34,0.12);transform:translateY(-2px)}
@@ -132,11 +133,22 @@ section{padding:72px 5%}
 .section-header h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;line-height:1.2}
 .section-header p{color:var(--muted);margin-top:10px;font-size:1rem}
 
+/* DEST CARD with photo gallery */
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:24px}
 .dest-card{border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);background:var(--white);cursor:pointer;transition:transform 0.25s,box-shadow 0.25s;position:relative}
 .dest-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.14)}
-.dest-img{height:200px;width:100%;object-fit:cover;display:block}
-.dest-badge{position:absolute;top:12px;left:12px;background:var(--primary);color:var(--white);font-size:0.74rem;font-weight:700;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.5px}
+.dest-img-gallery{height:200px;position:relative;overflow:hidden}
+.dest-img-gallery img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.5s}
+.dest-img-gallery img.active{opacity:1}
+.gallery-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:3}
+.gallery-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.2s}
+.gallery-dot.active{background:white;width:16px;border-radius:3px}
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.35);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.9rem;z-index:3;transition:background 0.2s;opacity:0}
+.dest-img-gallery:hover .gallery-nav{opacity:1}
+.gallery-nav:hover{background:rgba(0,0,0,0.6)}
+.gallery-prev{left:8px}
+.gallery-next{right:8px}
+.dest-badge{position:absolute;top:12px;left:12px;background:var(--primary);color:var(--white);font-size:0.74rem;font-weight:700;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.5px;z-index:2}
 .dest-body{padding:18px}
 .dest-body h3{font-size:1.05rem;font-weight:700;margin-bottom:4px}
 .dest-body .meta{color:var(--muted);font-size:0.85rem;margin-bottom:12px}
@@ -151,28 +163,38 @@ section{padding:72px 5%}
 .star-rating-widget .stars-input span:hover,.star-rating-widget .stars-input span.hover{color:#f59e0b;transform:scale(1.2)}
 .rating-count{font-size:0.78rem;color:var(--muted)}
 
+/* PACKAGES — 20 cards */
 .packages-section{background:linear-gradient(180deg,#f0f4ff 0%,var(--bg) 100%)}
+.pkg-grid-big{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
 .pkg-card{border-radius:var(--radius);background:var(--white);box-shadow:var(--card-shadow);overflow:hidden;cursor:pointer;transition:transform 0.25s,box-shadow 0.25s;display:flex;flex-direction:column}
 .pkg-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.14)}
-.pkg-banner{height:170px;position:relative;overflow:hidden}
-.pkg-banner img{width:100%;height:100%;object-fit:cover}
-.pkg-banner-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.5),transparent);display:flex;align-items:flex-end;padding:14px}
-.pkg-banner-overlay span{color:white;font-weight:700;font-size:1rem;text-shadow:0 1px 4px rgba(0,0,0,0.5)}
-.pkg-body{padding:18px;flex:1;display:flex;flex-direction:column}
-.pkg-body h3{font-size:1rem;font-weight:700;margin-bottom:6px}
-.pkg-features{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.feature-pill{background:#f3f4f6;color:var(--text);font-size:0.76rem;font-weight:500;padding:4px 10px;border-radius:999px}
-.pkg-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:14px;border-top:1px solid var(--border)}
-.pkg-price small{display:block;font-size:0.76rem;color:var(--muted)}
-.pkg-price strong{font-size:1.25rem;font-weight:700;color:var(--primary)}
-.btn-book{background:var(--secondary);color:var(--white);border:none;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.86rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.pkg-banner{height:160px;position:relative;overflow:hidden}
+.pkg-banner img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.pkg-card:hover .pkg-banner img{transform:scale(1.06)}
+.pkg-banner-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55),transparent);display:flex;align-items:flex-end;padding:12px}
+.pkg-banner-overlay span{color:white;font-weight:700;font-size:0.95rem;text-shadow:0 1px 4px rgba(0,0,0,0.5)}
+.pkg-discount-badge{position:absolute;top:10px;right:10px;background:var(--primary);color:white;font-size:0.72rem;font-weight:700;padding:3px 9px;border-radius:999px}
+.pkg-body{padding:14px 16px;flex:1;display:flex;flex-direction:column}
+.pkg-body h3{font-size:0.92rem;font-weight:700;margin-bottom:6px;color:var(--text)}
+.pkg-features{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.feature-pill{background:#f3f4f6;color:var(--text);font-size:0.72rem;font-weight:500;padding:3px 9px;border-radius:999px}
+.pkg-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px;border-top:1px solid var(--border)}
+.pkg-price small{display:block;font-size:0.72rem;color:var(--muted)}
+.pkg-price strong{font-size:1.15rem;font-weight:700;color:var(--primary)}
+.pkg-price .was{font-size:0.72rem;color:var(--muted);text-decoration:line-through}
+.btn-book{background:var(--secondary);color:var(--white);border:none;padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s}
 .btn-book:hover{background:#0d1757;transform:translateY(-1px)}
+.pkg-rating{font-size:0.72rem;color:#f59e0b;font-weight:600;margin-bottom:6px}
 
-/* HOTELS SECTION — EXPANDED GRID */
+/* HOTELS */
 .hotel-card{border-radius:var(--radius);background:var(--white);box-shadow:var(--card-shadow);overflow:hidden;display:flex;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
 .hotel-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,0.12)}
-.hotel-img{width:160px;min-height:160px;flex-shrink:0;overflow:hidden}
-.hotel-img img{width:100%;height:100%;object-fit:cover}
+.hotel-img-gallery{width:160px;min-height:160px;flex-shrink:0;overflow:hidden;position:relative}
+.hotel-img-gallery img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity 0.4s}
+.hotel-img-gallery img.active{opacity:1}
+.hotel-img-dots{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);display:flex;gap:3px;z-index:2}
+.hotel-img-dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.2s}
+.hotel-img-dots span.active{background:white;width:12px;border-radius:2px}
 .hotel-body{padding:16px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
 .hotel-body h3{font-size:1rem;font-weight:700;margin-bottom:3px}
 .hotel-location{font-size:0.82rem;color:var(--muted);margin-bottom:6px}
@@ -232,7 +254,6 @@ section{padding:72px 5%}
 .app-btns{display:flex;gap:14px}
 .btn-app{background:var(--secondary);color:var(--white);border:none;padding:12px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s}
 .btn-app:hover{background:#0d1757;transform:translateY(-2px)}
-.app-emoji{font-size:7rem;opacity:0.25;position:absolute;right:60px}
 
 footer{background:#0f1629;color:rgba(255,255,255,0.65);padding:60px 5% 32px}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
@@ -361,7 +382,6 @@ footer{background:#0f1629;color:rgba(255,255,255,0.65);padding:60px 5% 32px}
   .offers-grid{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr}
   .app-banner-overlay{padding:28px;flex-direction:column;align-items:flex-start}
-  .app-emoji{display:none}
   .fields-row{grid-template-columns:1fr}
   .payment-methods{grid-template-columns:1fr 1fr}
   .admin-stats{grid-template-columns:1fr 1fr}
@@ -370,7 +390,7 @@ footer{background:#0f1629;color:rgba(255,255,255,0.65);padding:60px 5% 32px}
 @media(max-width:480px){
   .search-fields{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr}
-  .hotel-img{width:110px}
+  .hotel-img-gallery{width:110px}
 }
 </style>
 </head>
@@ -417,7 +437,6 @@ footer{background:#0f1629;color:rgba(255,255,255,0.65);padding:60px 5% 32px}
       <div class="field-group"><label>Check-out</label><input type="date" id="checkout"/></div>
       <button class="btn-search" onclick="handleSearch()">🔍 Search</button>
     </div>
-    <!-- SEARCH RESULTS PANEL (appears inside search box) -->
     <div class="search-results-panel" id="searchResultsPanel">
       <div class="results-header">
         <h3 id="resultsTitle">Results</h3>
@@ -436,149 +455,27 @@ footer{background:#0f1629;color:rgba(255,255,255,0.65);padding:60px 5% 32px}
   <div class="stat"><div class="stat-num">4.8★</div><div class="stat-label">App Rating</div></div>
 </div>
 
-<!-- DESTINATIONS -->
+<!-- DESTINATIONS with multi-photo gallery -->
 <section id="destinations">
   <div class="section-header">
     <div class="section-tag">🔥 Trending Now</div>
     <h2>Popular Destinations</h2>
     <p>Hand-picked getaways loved by millions of Indian travellers</p>
   </div>
-  <div class="cards-grid">
-    <div class="dest-card" onclick="openBooking('Goa Beach Stay','1299','https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=400&q=80','goa')">
-      <img class="dest-img" src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80" alt="Goa" loading="lazy"/>
-      <div class="dest-badge">Trending</div>
-      <div class="dest-body">
-        <h3>Goa</h3>
-        <div class="meta">🌊 Beaches · Nightlife · Culture</div>
-        <div class="dest-footer">
-          <div><div class="price-from">Hotels from</div><div class="price-val">₹1,299/night</div></div>
-          <div class="rating-display">⭐ <span id="avg-goa">4.8</span></div>
-        </div>
-        <div class="star-rating-widget">
-          <div class="stars-input" data-id="goa" onmouseleave="clearHover('goa')">
-            <span onclick="setRating('goa',1,event)" onmouseover="hoverRating('goa',1)">★</span>
-            <span onclick="setRating('goa',2,event)" onmouseover="hoverRating('goa',2)">★</span>
-            <span onclick="setRating('goa',3,event)" onmouseover="hoverRating('goa',3)">★</span>
-            <span onclick="setRating('goa',4,event)" onmouseover="hoverRating('goa',4)">★</span>
-            <span onclick="setRating('goa',5,event)" onmouseover="hoverRating('goa',5)">★</span>
-          </div>
-          <span class="rating-count" id="count-goa">(2,341 ratings)</span>
-        </div>
-      </div>
-    </div>
-    <div class="dest-card" onclick="openBooking('Manali Mountain Stay','899','https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=400&q=80','manali')">
-      <img class="dest-img" src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80" alt="Manali" loading="lazy"/>
-      <div class="dest-badge">Popular</div>
-      <div class="dest-body">
-        <h3>Manali</h3>
-        <div class="meta">❄️ Mountains · Adventure · Snow</div>
-        <div class="dest-footer">
-          <div><div class="price-from">Hotels from</div><div class="price-val">₹899/night</div></div>
-          <div class="rating-display">⭐ <span id="avg-manali">4.7</span></div>
-        </div>
-        <div class="star-rating-widget">
-          <div class="stars-input" data-id="manali" onmouseleave="clearHover('manali')">
-            <span onclick="setRating('manali',1,event)" onmouseover="hoverRating('manali',1)">★</span>
-            <span onclick="setRating('manali',2,event)" onmouseover="hoverRating('manali',2)">★</span>
-            <span onclick="setRating('manali',3,event)" onmouseover="hoverRating('manali',3)">★</span>
-            <span onclick="setRating('manali',4,event)" onmouseover="hoverRating('manali',4)">★</span>
-            <span onclick="setRating('manali',5,event)" onmouseover="hoverRating('manali',5)">★</span>
-          </div>
-          <span class="rating-count" id="count-manali">(1,892 ratings)</span>
-        </div>
-      </div>
-    </div>
-    <div class="dest-card" onclick="openBooking('Rajasthan Royal Heritage','1599','https://images.unsplash.com/photo-1599661046289-e31897846e41?w=400&q=80','rajasthan')">
-      <img class="dest-img" src="https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80" alt="Rajasthan" loading="lazy"/>
-      <div class="dest-badge">Heritage</div>
-      <div class="dest-body">
-        <h3>Rajasthan</h3>
-        <div class="meta">🏰 Forts · Deserts · Royal Culture</div>
-        <div class="dest-footer">
-          <div><div class="price-from">Hotels from</div><div class="price-val">₹1,599/night</div></div>
-          <div class="rating-display">⭐ <span id="avg-rajasthan">4.9</span></div>
-        </div>
-        <div class="star-rating-widget">
-          <div class="stars-input" data-id="rajasthan" onmouseleave="clearHover('rajasthan')">
-            <span onclick="setRating('rajasthan',1,event)" onmouseover="hoverRating('rajasthan',1)">★</span>
-            <span onclick="setRating('rajasthan',2,event)" onmouseover="hoverRating('rajasthan',2)">★</span>
-            <span onclick="setRating('rajasthan',3,event)" onmouseover="hoverRating('rajasthan',3)">★</span>
-            <span onclick="setRating('rajasthan',4,event)" onmouseover="hoverRating('rajasthan',4)">★</span>
-            <span onclick="setRating('rajasthan',5,event)" onmouseover="hoverRating('rajasthan',5)">★</span>
-          </div>
-          <span class="rating-count" id="count-rajasthan">(3,105 ratings)</span>
-        </div>
-      </div>
-    </div>
-    <div class="dest-card" onclick="openBooking('Kerala Backwater Retreat','1099','https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80','kerala')">
-      <img class="dest-img" src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80" alt="Kerala" loading="lazy"/>
-      <div class="dest-badge">Nature</div>
-      <div class="dest-body">
-        <h3>Kerala</h3>
-        <div class="meta">🛶 Backwaters · Spices · Wellness</div>
-        <div class="dest-footer">
-          <div><div class="price-from">Hotels from</div><div class="price-val">₹1,099/night</div></div>
-          <div class="rating-display">⭐ <span id="avg-kerala">4.8</span></div>
-        </div>
-        <div class="star-rating-widget">
-          <div class="stars-input" data-id="kerala" onmouseleave="clearHover('kerala')">
-            <span onclick="setRating('kerala',1,event)" onmouseover="hoverRating('kerala',1)">★</span>
-            <span onclick="setRating('kerala',2,event)" onmouseover="hoverRating('kerala',2)">★</span>
-            <span onclick="setRating('kerala',3,event)" onmouseover="hoverRating('kerala',3)">★</span>
-            <span onclick="setRating('kerala',4,event)" onmouseover="hoverRating('kerala',4)">★</span>
-            <span onclick="setRating('kerala',5,event)" onmouseover="hoverRating('kerala',5)">★</span>
-          </div>
-          <span class="rating-count" id="count-kerala">(2,678 ratings)</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="cards-grid" id="destGrid"></div>
 </section>
 
-<!-- PACKAGES -->
+<!-- PACKAGES — 20 options -->
 <section class="packages-section" id="packages">
   <div class="section-header">
     <div class="section-tag">🎒 Best Value</div>
     <h2>Holiday Packages</h2>
-    <p>All-inclusive deals with flights, hotel, and activities bundled together</p>
+    <p>All-inclusive deals with flights, hotel, and activities — 20 hand-picked options</p>
   </div>
-  <div class="cards-grid">
-    <div class="pkg-card">
-      <div class="pkg-banner"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80" alt="Goa" loading="lazy"/><div class="pkg-banner-overlay"><span>Goa Beach Escape</span></div></div>
-      <div class="pkg-body">
-        <h3>Goa Beach Escape — 4N/5D</h3>
-        <div class="pkg-features"><span class="feature-pill">✈️ Flights</span><span class="feature-pill">🏨 3-Star Hotel</span><span class="feature-pill">🍽️ Breakfast</span><span class="feature-pill">🚕 Transfers</span></div>
-        <div class="pkg-footer"><div class="pkg-price"><small>Per person</small><strong>₹18,499</strong></div><button class="btn-book" onclick="openBooking('Goa Beach Escape 4N/5D','18499','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80','pkg-goa');event.stopPropagation()">Book Now</button></div>
-      </div>
-    </div>
-    <div class="pkg-card">
-      <div class="pkg-banner"><img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80" alt="Kerala" loading="lazy"/><div class="pkg-banner-overlay"><span>Kerala Backwater Bliss</span></div></div>
-      <div class="pkg-body">
-        <h3>Kerala Backwater Bliss — 5N/6D</h3>
-        <div class="pkg-features"><span class="feature-pill">✈️ Flights</span><span class="feature-pill">🛶 Houseboat</span><span class="feature-pill">🍽️ All Meals</span><span class="feature-pill">🧘 Ayurveda</span></div>
-        <div class="pkg-footer"><div class="pkg-price"><small>Per person</small><strong>₹24,999</strong></div><button class="btn-book" onclick="openBooking('Kerala Backwater Bliss 5N/6D','24999','https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80','pkg-kerala');event.stopPropagation()">Book Now</button></div>
-      </div>
-    </div>
-    <div class="pkg-card">
-      <div class="pkg-banner"><img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80" alt="Manali" loading="lazy"/><div class="pkg-banner-overlay"><span>Manali Snow Adventure</span></div></div>
-      <div class="pkg-body">
-        <h3>Manali Snow Adventure — 6N/7D</h3>
-        <div class="pkg-features"><span class="feature-pill">🚌 Volvo Bus</span><span class="feature-pill">🏨 4-Star Hotel</span><span class="feature-pill">🍽️ Breakfast</span><span class="feature-pill">🎿 Activities</span></div>
-        <div class="pkg-footer"><div class="pkg-price"><small>Per person</small><strong>₹15,999</strong></div><button class="btn-book" onclick="openBooking('Manali Snow Adventure 6N/7D','15999','https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=400&q=80','pkg-manali');event.stopPropagation()">Book Now</button></div>
-      </div>
-    </div>
-    <div class="pkg-card">
-      <div class="pkg-banner"><img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80" alt="Rajasthan" loading="lazy"/><div class="pkg-banner-overlay"><span>Rajasthan Royal Tour</span></div></div>
-      <div class="pkg-body">
-        <h3>Rajasthan Royal Tour — 7N/8D</h3>
-        <div class="pkg-features"><span class="feature-pill">✈️ Flights</span><span class="feature-pill">🏰 Heritage Hotel</span><span class="feature-pill">🍽️ All Meals</span><span class="feature-pill">🐪 Camel Safari</span></div>
-        <div class="pkg-footer"><div class="pkg-price"><small>Per person</small><strong>₹32,499</strong></div><button class="btn-book" onclick="openBooking('Rajasthan Royal Tour 7N/8D','32499','https://images.unsplash.com/photo-1599661046289-e31897846e41?w=400&q=80','pkg-rajasthan');event.stopPropagation()">Book Now</button></div>
-      </div>
-    </div>
-  </div>
+  <div class="pkg-grid-big" id="packagesGrid"></div>
 </section>
 
-<!-- HOTELS — EXPANDED 15 HOTELS -->
+<!-- HOTELS -->
 <section id="hotels">
   <div class="section-header">
     <div class="section-tag">🏨 Top Rated</div>
@@ -639,7 +536,6 @@ footer{background:#0f1629;color:rgba(255,255,255,0.65);padding:60px 5% 32px}
         <button class="btn-app" onclick="showToast('Redirecting to Play Store...')">🤖 Google Play</button>
       </div>
     </div>
-    <div class="app-emoji">📱</div>
   </div>
 </div>
 
@@ -862,47 +758,298 @@ footer{background:#0f1629;color:rgba(255,255,255,0.65);padding:60px 5% 32px}
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
 
 <script>
-// ═══════════ DATABASE ═══════════
+// ═══ DATABASE ═══
 const DB = {
-  get: (key) => { try { return JSON.parse(localStorage.getItem('tw_' + key)) || [] } catch(e) { return [] } },
-  set: (key, val) => localStorage.setItem('tw_' + key, JSON.stringify(val)),
-  push: (key, item) => { const arr = DB.get(key); arr.push(item); DB.set(key, arr); return arr; }
+  get: (k) => { try { return JSON.parse(localStorage.getItem('tw_'+k)) || [] } catch(e) { return [] } },
+  set: (k, v) => localStorage.setItem('tw_'+k, JSON.stringify(v)),
+  push: (k, item) => { const a = DB.get(k); a.push(item); DB.set(k, a); return a; }
 };
 if (!DB.get('bookings').length) DB.set('bookings', []);
 if (!DB.get('users').length) DB.set('users', []);
 if (!DB.get('ratings').length) DB.set('ratings', [
   {dest:'goa',sum:11243,count:2341},{dest:'manali',sum:8900,count:1892},
-  {dest:'rajasthan',sum:15201,count:3105},{dest:'kerala',sum:12854,count:2678}
+  {dest:'rajasthan',sum:15201,count:3105},{dest:'kerala',sum:12854,count:2678},
+  {dest:'andaman',sum:6240,count:1320},{dest:'ladakh',sum:9870,count:2100}
 ]);
 
-// ═══════════ ALL HOTELS DATA (15) ═══════════
-const ALL_HOTELS = [
-  {name:'The Grand Leela, Goa',loc:'Candolim Beach, North Goa',stars:5,price:3499,img:'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80',amenities:['🏊 Pool','🍳 Breakfast','📶 WiFi','🅿️ Parking'],badge:'hot',badgeLabel:'HOT DEAL',rating:'4.8'},
-  {name:'Taj Lake Palace, Udaipur',loc:'Lake Pichola, Udaipur',stars:5,price:28000,img:'https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=400&q=80',amenities:['🛥️ Boat Access','🍽️ Fine Dining','💆 Spa'],badge:'lux',badgeLabel:'LUXURY',rating:'4.9'},
-  {name:'Snow Valley Resort, Manali',loc:'Old Manali Road, Manali',stars:4,price:2199,img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80',amenities:['❄️ Mountain View','🍳 Breakfast','🔥 Bonfire'],badge:'',badgeLabel:'',rating:'4.6'},
-  {name:'Kumarakom Lake Resort, Kerala',loc:'Kottayam, Kerala',stars:5,price:12000,img:'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80',amenities:['🛶 Kayaking','🍽️ All Meals','🧘 Yoga'],badge:'',badgeLabel:'',rating:'4.8'},
-  {name:'Oberoi Rajvilas, Jaipur',loc:'Goner Road, Jaipur',stars:5,price:22000,img:'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=400&q=80',amenities:['🏰 Heritage','💆 Spa','🏊 Pool','🐘 Elephant Ride'],badge:'lux',badgeLabel:'LUXURY',rating:'4.9'},
-  {name:'WelcomHotel Sheraton, Mumbai',loc:'Sahar Road, Mumbai Airport',stars:5,price:8500,img:'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&q=80',amenities:['✈️ Airport Shuttle','🏋️ Gym','📶 WiFi','🍽️ Multi-cuisine'],badge:'new',badgeLabel:'NEW',rating:'4.7'},
-  {name:'The Park, Bangalore',loc:'MG Road, Bangalore',stars:5,price:7200,img:'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=400&q=80',amenities:['🎵 Nightclub','🏊 Rooftop Pool','🍹 Bar','💆 Spa'],badge:'',badgeLabel:'',rating:'4.5'},
-  {name:'ITC Grand Chola, Chennai',loc:'Anna Salai, Chennai',stars:5,price:9800,img:'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=80',amenities:['🏊 Pool','🎭 Convention Centre','💆 Spa','🍽️ 7 Restaurants'],badge:'',badgeLabel:'',rating:'4.8'},
-  {name:'Wildflower Hall, Shimla',loc:'Mashobra, Shimla',stars:5,price:18500,img:'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80',amenities:['🏔️ Mountain View','🚿 Heated Pool','🌲 Nature Walks','🍳 Breakfast'],badge:'lux',badgeLabel:'LUXURY',rating:'4.9'},
-  {name:'Treehouse Hideaway, Bandhavgarh',loc:'MP Safari Zone',stars:4,price:5800,img:'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=400&q=80',amenities:['🐯 Safari','🌿 Eco Stay','🍽️ All Meals','🔭 Star Gazing'],badge:'eco',badgeLabel:'ECO',rating:'4.7'},
-  {name:'Radisson Blu, Agra',loc:'Taj Nagri, Agra',stars:5,price:6500,img:'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&q=80',amenities:['🕌 Taj View','🏊 Pool','🍽️ Breakfast','🚌 Taj Transfer'],badge:'hot',badgeLabel:'HOT DEAL',rating:'4.6'},
-  {name:'Zostel Rishikesh',loc:'Muni Ki Reti, Rishikesh',stars:3,price:799,img:'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80',amenities:['🧘 Yoga','🌊 Rafting','🎒 Backpacker','🔥 Bonfire'],badge:'new',badgeLabel:'BUDGET',rating:'4.4'},
-  {name:'Niraamaya Retreats, Kovalam',loc:'Kovalam Beach, Kerala',stars:5,price:14000,img:'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&q=80',amenities:['🌊 Beachfront','🧘 Ayurveda','🥗 Organic Food','💆 Spa'],badge:'eco',badgeLabel:'ECO',rating:'4.8'},
-  {name:'Hyatt Regency, Delhi',loc:'Bhikaji Cama Place, New Delhi',stars:5,price:11000,img:'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&q=80',amenities:['🏊 Pool','💆 Spa','🍽️ Fine Dining','🏋️ Gym'],badge:'',badgeLabel:'',rating:'4.7'},
-  {name:'Club Mahindra Coorg',loc:'Madikeri, Coorg',stars:4,price:4200,img:'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=400&q=80',amenities:['☕ Coffee Estate','🏊 Pool','🎯 Activities','🍽️ All Meals'],badge:'hot',badgeLabel:'HOT DEAL',rating:'4.5'}
+// ═══ REAL PHOTO GALLERIES (5 photos each destination) ═══
+const DEST_DATA = [
+  { id:'goa', name:'Goa', badge:'Trending', meta:'🌊 Beaches · Nightlife · Culture', price:'1,299',
+    photos:[
+      'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80',
+      'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
+      'https://images.unsplash.com/photo-1583165927716-b0e6b9e7d66b?w=600&q=80',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80'
+    ]},
+  { id:'manali', name:'Manali', badge:'Popular', meta:'❄️ Mountains · Adventure · Snow', price:'899',
+    photos:[
+      'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80',
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80',
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80',
+      'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=600&q=80',
+      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80'
+    ]},
+  { id:'rajasthan', name:'Rajasthan', badge:'Heritage', meta:'🏰 Forts · Deserts · Royal Culture', price:'1,599',
+    photos:[
+      'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+      'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&q=80',
+      'https://images.unsplash.com/photo-1578681994506-b8f463449011?w=600&q=80',
+      'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80',
+      'https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=600&q=80'
+    ]},
+  { id:'kerala', name:'Kerala', badge:'Nature', meta:'🛶 Backwaters · Spices · Wellness', price:'1,099',
+    photos:[
+      'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80',
+      'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=600&q=80',
+      'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=600&q=80',
+      'https://images.unsplash.com/photo-1467377791767-c929b5dc9a23?w=600&q=80',
+      'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=600&q=80'
+    ]},
+  { id:'andaman', name:'Andaman', badge:'Islands', meta:'🏝️ Coral · Diving · Pristine Beaches', price:'3,499',
+    photos:[
+      'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80',
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80',
+      'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&q=80',
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80',
+      'https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=600&q=80'
+    ]},
+  { id:'ladakh', name:'Ladakh', badge:'Adventure', meta:'🏔️ High Altitude · Monasteries · Stargazing', price:'2,199',
+    photos:[
+      'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=600&q=80',
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80',
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80',
+      'https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=600&q=80',
+      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80'
+    ]}
 ];
 
-// ═══════════ RENDER HOTELS SECTION ═══════════
-function renderHotelsSection() {
+// ═══ HOTELS DATA with 5 photos each ═══
+const ALL_HOTELS = [
+  {name:'The Grand Leela, Goa',loc:'Candolim Beach, North Goa',stars:5,price:3499,amenities:['🏊 Pool','🍳 Breakfast','📶 WiFi','🅿️ Parking'],badge:'hot',badgeLabel:'HOT DEAL',rating:'4.8',
+    photos:['https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80','https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=80','https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&q=80','https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&q=80','https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=400&q=80']},
+  {name:'Taj Lake Palace, Udaipur',loc:'Lake Pichola, Udaipur',stars:5,price:28000,amenities:['🛥️ Boat Access','🍽️ Fine Dining','💆 Spa'],badge:'lux',badgeLabel:'LUXURY',rating:'4.9',
+    photos:['https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=400&q=80','https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=400&q=80','https://images.unsplash.com/photo-1578681994506-b8f463449011?w=400&q=80','https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&q=80','https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80']},
+  {name:'Snow Valley Resort, Manali',loc:'Old Manali Road, Manali',stars:4,price:2199,amenities:['❄️ Mountain View','🍳 Breakfast','🔥 Bonfire'],badge:'',badgeLabel:'',rating:'4.6',
+    photos:['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80','https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80','https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=400&q=80','https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80','https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=400&q=80']},
+  {name:'Kumarakom Lake Resort, Kerala',loc:'Kottayam, Kerala',stars:5,price:12000,amenities:['🛶 Kayaking','🍽️ All Meals','🧘 Yoga'],badge:'',badgeLabel:'',rating:'4.8',
+    photos:['https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80','https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&q=80','https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=400&q=80','https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=400&q=80','https://images.unsplash.com/photo-1467377791767-c929b5dc9a23?w=400&q=80']},
+  {name:'Oberoi Rajvilas, Jaipur',loc:'Goner Road, Jaipur',stars:5,price:22000,amenities:['🏰 Heritage','💆 Spa','🏊 Pool','🐘 Elephant Ride'],badge:'lux',badgeLabel:'LUXURY',rating:'4.9',
+    photos:['https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=400&q=80','https://images.unsplash.com/photo-1599661046289-e31897846e41?w=400&q=80','https://images.unsplash.com/photo-1583165927716-b0e6b9e7d66b?w=400&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80','https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=400&q=80']},
+  {name:'WelcomHotel Sheraton, Mumbai',loc:'Sahar Road, Mumbai Airport',stars:5,price:8500,amenities:['✈️ Airport Shuttle','🏋️ Gym','📶 WiFi','🍽️ Multi-cuisine'],badge:'new',badgeLabel:'NEW',rating:'4.7',
+    photos:['https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&q=80','https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&q=80','https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80','https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=80','https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&q=80']},
+  {name:'The Park, Bangalore',loc:'MG Road, Bangalore',stars:5,price:7200,amenities:['🎵 Nightclub','🏊 Rooftop Pool','🍹 Bar','💆 Spa'],badge:'',badgeLabel:'',rating:'4.5',
+    photos:['https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=400&q=80','https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&q=80','https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80','https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&q=80','https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=80']},
+  {name:'ITC Grand Chola, Chennai',loc:'Anna Salai, Chennai',stars:5,price:9800,amenities:['🏊 Pool','🎭 Convention Centre','💆 Spa','🍽️ 7 Restaurants'],badge:'',badgeLabel:'',rating:'4.8',
+    photos:['https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=80','https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=400&q=80','https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&q=80','https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&q=80','https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=400&q=80']},
+  {name:'Wildflower Hall, Shimla',loc:'Mashobra, Shimla',stars:5,price:18500,amenities:['🏔️ Mountain View','🚿 Heated Pool','🌲 Nature Walks','🍳 Breakfast'],badge:'lux',badgeLabel:'LUXURY',rating:'4.9',
+    photos:['https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80','https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80','https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80','https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80','https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=400&q=80']},
+  {name:'Treehouse Hideaway, Bandhavgarh',loc:'MP Safari Zone',stars:4,price:5800,amenities:['🐯 Safari','🌿 Eco Stay','🍽️ All Meals','🔭 Star Gazing'],badge:'eco',badgeLabel:'ECO',rating:'4.7',
+    photos:['https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=400&q=80','https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80','https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=400&q=80','https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80','https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&q=80']},
+  {name:'Radisson Blu, Agra',loc:'Taj Nagri, Agra',stars:5,price:6500,amenities:['🕌 Taj View','🏊 Pool','🍽️ Breakfast','🚌 Taj Transfer'],badge:'hot',badgeLabel:'HOT DEAL',rating:'4.6',
+    photos:['https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&q=80','https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=400&q=80','https://images.unsplash.com/photo-1599661046289-e31897846e41?w=400&q=80','https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=400&q=80','https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&q=80']},
+  {name:'Zostel Rishikesh',loc:'Muni Ki Reti, Rishikesh',stars:3,price:799,amenities:['🧘 Yoga','🌊 Rafting','🎒 Backpacker','🔥 Bonfire'],badge:'new',badgeLabel:'BUDGET',rating:'4.4',
+    photos:['https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80','https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=400&q=80','https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=400&q=80','https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80','https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80']},
+  {name:'Niraamaya Retreats, Kovalam',loc:'Kovalam Beach, Kerala',stars:5,price:14000,amenities:['🌊 Beachfront','🧘 Ayurveda','🥗 Organic Food','💆 Spa'],badge:'eco',badgeLabel:'ECO',rating:'4.8',
+    photos:['https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&q=80','https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&q=80','https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=400&q=80','https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=400&q=80','https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80']},
+  {name:'Hyatt Regency, Delhi',loc:'Bhikaji Cama Place, New Delhi',stars:5,price:11000,amenities:['🏊 Pool','💆 Spa','🍽️ Fine Dining','🏋️ Gym'],badge:'',badgeLabel:'',rating:'4.7',
+    photos:['https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&q=80','https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=400&q=80','https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80','https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=80','https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&q=80']},
+  {name:'Club Mahindra Coorg',loc:'Madikeri, Coorg',stars:4,price:4200,amenities:['☕ Coffee Estate','🏊 Pool','🎯 Activities','🍽️ All Meals'],badge:'hot',badgeLabel:'HOT DEAL',rating:'4.5',
+    photos:['https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=400&q=80','https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80','https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=400&q=80','https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&q=80','https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=400&q=80']}
+];
+
+// ═══ PACKAGES — 20 ITEMS ═══
+const ALL_PACKAGES = [
+  {name:'Goa Beach Escape — 4N/5D', dest:'Goa', price:18499, was:24999, discount:'25% OFF', rating:'4.8', reviews:2341,
+    img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80',
+    features:['✈️ Flights','🏨 3-Star Hotel','🍽️ Breakfast','🚕 Transfers']},
+  {name:'Kerala Backwater Bliss — 5N/6D', dest:'Kerala', price:24999, was:31999, discount:'21% OFF', rating:'4.9', reviews:1876,
+    img:'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80',
+    features:['✈️ Flights','🛶 Houseboat','🍽️ All Meals','🧘 Ayurveda']},
+  {name:'Manali Snow Adventure — 6N/7D', dest:'Manali', price:15999, was:19999, discount:'20% OFF', rating:'4.7', reviews:3102,
+    img:'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80',
+    features:['🚌 Volvo Bus','🏨 4-Star Hotel','🍽️ Breakfast','🎿 Activities']},
+  {name:'Rajasthan Royal Tour — 7N/8D', dest:'Rajasthan', price:32499, was:41999, discount:'22% OFF', rating:'4.9', reviews:2890,
+    img:'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+    features:['✈️ Flights','🏰 Heritage Hotel','🍽️ All Meals','🐪 Camel Safari']},
+  {name:'Andaman Island Escape — 5N/6D', dest:'Andaman', price:28999, was:35999, discount:'19% OFF', rating:'4.8', reviews:1540,
+    img:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80',
+    features:['✈️ Flights','🏨 Beach Resort','🤿 Snorkeling','🚤 Island Hopping']},
+  {name:'Ladakh Bike & Camp — 7N/8D', dest:'Ladakh', price:22999, was:28999, discount:'20% OFF', rating:'4.7', reviews:987,
+    img:'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=600&q=80',
+    features:['🏍️ Royal Enfield','⛺ Camping','🍽️ All Meals','🏔️ High Passes']},
+  {name:'Shimla & Manali Combo — 7N/8D', dest:'Himachal Pradesh', price:19999, was:26999, discount:'25% OFF', rating:'4.6', reviews:2210,
+    img:'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80',
+    features:['🚌 AC Bus','🏨 3-Star Hotels','🍽️ Breakfast','🎯 Sightseeing']},
+  {name:'Varanasi Spiritual Tour — 3N/4D', dest:'Varanasi', price:8999, was:11999, discount:'25% OFF', rating:'4.8', reviews:3400,
+    img:'https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=600&q=80',
+    features:['✈️ Flights','🏨 Boutique Hotel','🪔 Ganga Aarti','🛶 Boat Ride']},
+  {name:'Coorg Coffee Estate Retreat — 3N/4D', dest:'Coorg', price:11499, was:14999, discount:'23% OFF', rating:'4.5', reviews:1876,
+    img:'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600&q=80',
+    features:['✈️ Flights','☕ Estate Stay','🏊 Pool','🧘 Yoga Sessions']},
+  {name:'Rishikesh Yoga Retreat — 4N/5D', dest:'Rishikesh', price:12999, was:17999, discount:'27% OFF', rating:'4.7', reviews:2100,
+    img:'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80',
+    features:['🚌 Bus','🏕️ Ashram Stay','🧘 Daily Yoga','🌊 River Rafting']},
+  {name:'Darjeeling & Sikkim — 6N/7D', dest:'North East India', price:21999, was:27999, discount:'21% OFF', rating:'4.6', reviews:1320,
+    img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80',
+    features:['✈️ Flights','🏨 Hill Stations','☕ Tea Gardens','🚞 Toy Train']},
+  {name:'Mumbai City & Alibaug — 3N/4D', dest:'Maharashtra', price:9499, was:12999, discount:'26% OFF', rating:'4.4', reviews:890,
+    img:'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600&q=80',
+    features:['🏨 5-Star Hotel','🍽️ Breakfast','🚢 Ferry','🏖️ Beach Day']},
+  {name:'Ooty & Munnar Hill Escape — 5N/6D', dest:'South India Hills', price:16999, was:21999, discount:'22% OFF', rating:'4.5', reviews:1650,
+    img:'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=600&q=80',
+    features:['✈️ Flights','🏨 Hill Resort','🍵 Tea Estates','🚡 Cable Car']},
+  {name:'Agra & Taj Mahal — 2N/3D', dest:'Agra', price:6999, was:9999, discount:'30% OFF', rating:'4.7', reviews:4500,
+    img:'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&q=80',
+    features:['✈️ Flights','🏨 Taj View Room','🕌 Taj Entry','🚌 City Tour']},
+  {name:'Kashmir Paradise — 5N/6D', dest:'Kashmir', price:26999, was:33999, discount:'20% OFF', rating:'4.9', reviews:2780,
+    img:'https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=600&q=80',
+    features:['✈️ Flights','🛶 Shikara','🏡 Houseboat','🌹 Mughal Gardens']},
+  {name:'Hampi & Badami Heritage — 4N/5D', dest:'Karnataka', price:13999, was:17999, discount:'22% OFF', rating:'4.6', reviews:980,
+    img:'https://images.unsplash.com/photo-1583165927716-b0e6b9e7d66b?w=600&q=80',
+    features:['✈️ Flights','🏨 Heritage Stay','🏛️ Temple Walks','🚴 Cycling']},
+  {name:'Rann of Kutch — 3N/4D', dest:'Gujarat', price:10999, was:14999, discount:'26% OFF', rating:'4.7', reviews:1230,
+    img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+    features:['✈️ Flights','🏕️ Tent Stay','🌅 White Rann','🎭 Rann Utsav']},
+  {name:'Lakshadweep Water Villas — 4N/5D', dest:'Lakshadweep', price:45999, was:58999, discount:'22% OFF', rating:'4.9', reviews:650,
+    img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80',
+    features:['✈️ + Ship','🏝️ Water Villa','🤿 Scuba Diving','🐠 Marine Life']},
+  {name:'Spiti Valley Expedition — 8N/9D', dest:'Himachal Pradesh', price:29999, was:37999, discount:'21% OFF', rating:'4.8', reviews:760,
+    img:'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80',
+    features:['🚙 4WD Safari','⛺ Camping','🏔️ High Altitude','🏛️ Monasteries']},
+  {name:'Honeymoon in Maldives — 5N/6D', dest:'Maldives', price:79999, was:99999, discount:'20% OFF', rating:'5.0', reviews:3200,
+    img:'https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?w=600&q=80',
+    features:['✈️ Flights','🏝️ Overwater Villa','🍾 Champagne','🤿 Snorkeling']}
+];
+
+// ═══ RENDER DESTINATIONS ═══
+function renderDestinations() {
+  const grid = document.getElementById('destGrid');
+  grid.innerHTML = DEST_DATA.map(d => {
+    const imgs = d.photos.map((p, i) =>
+      `<img src="${p}" alt="${d.name} ${i+1}" loading="lazy" class="${i===0?'active':''}" data-idx="${i}"/>`
+    ).join('');
+    const dots = d.photos.map((_, i) =>
+      `<div class="gallery-dot ${i===0?'active':''}" onclick="switchGallery('dest-${d.id}',${i},event)"></div>`
+    ).join('');
+    return `
+    <div class="dest-card" onclick="openBooking('${d.name} Beach Stay','1299','${d.photos[0]}','${d.id}')">
+      <div class="dest-img-gallery" id="dest-${d.id}">
+        ${imgs}
+        <button class="gallery-nav gallery-prev" onclick="navGallery('dest-${d.id}',-1,event)">‹</button>
+        <button class="gallery-nav gallery-next" onclick="navGallery('dest-${d.id}',1,event)">›</button>
+        <div class="gallery-dots">${dots}</div>
+      </div>
+      <div class="dest-badge">${d.badge}</div>
+      <div class="dest-body">
+        <h3>${d.name}</h3>
+        <div class="meta">${d.meta}</div>
+        <div class="dest-footer">
+          <div><div class="price-from">Hotels from</div><div class="price-val">₹${d.price}/night</div></div>
+          <div class="rating-display">⭐ <span id="avg-${d.id}">4.8</span></div>
+        </div>
+        <div class="star-rating-widget">
+          <div class="stars-input" data-id="${d.id}" onmouseleave="clearHover('${d.id}')">
+            ${[1,2,3,4,5].map(n=>`<span onclick="setRating('${d.id}',${n},event)" onmouseover="hoverRating('${d.id}',${n})">★</span>`).join('')}
+          </div>
+          <span class="rating-count" id="count-${d.id}">(loading)</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  DEST_DATA.forEach(d => renderStars(d.id));
+}
+
+// ═══ GALLERY NAVIGATION ═══
+function getActiveIdx(galleryId) {
+  const imgs = document.querySelectorAll(`#${galleryId} img`);
+  for (let i = 0; i < imgs.length; i++) { if (imgs[i].classList.contains('active')) return i; }
+  return 0;
+}
+function switchGallery(galleryId, idx, e) {
+  if (e) e.stopPropagation();
+  const imgs = document.querySelectorAll(`#${galleryId} img`);
+  const dots = document.querySelectorAll(`#${galleryId} ~ * .gallery-dot, #${galleryId} .gallery-dots .gallery-dot`);
+  // find dots inside gallery
+  const gdots = document.querySelectorAll(`#${galleryId} .gallery-dot`);
+  imgs.forEach((img, i) => img.classList.toggle('active', i === idx));
+  gdots.forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+function navGallery(galleryId, dir, e) {
+  if (e) e.stopPropagation();
+  const imgs = document.querySelectorAll(`#${galleryId} img`);
+  let cur = getActiveIdx(galleryId);
+  let next = (cur + dir + imgs.length) % imgs.length;
+  switchGallery(galleryId, next, null);
+}
+
+// Hotel gallery auto-switch
+function initHotelGalleries() {
+  document.querySelectorAll('.hotel-img-gallery').forEach(gallery => {
+    const id = gallery.id;
+    const imgs = gallery.querySelectorAll('img');
+    const dots = gallery.querySelectorAll('.hotel-img-dots span');
+    let cur = 0;
+    gallery.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cur = (cur + 1) % imgs.length;
+      imgs.forEach((img, i) => img.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+    });
+    setInterval(() => {
+      cur = (cur + 1) % imgs.length;
+      imgs.forEach((img, i) => img.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+    }, 3500 + Math.random() * 2000);
+  });
+}
+
+// ═══ RENDER PACKAGES ═══
+function renderPackages() {
+  const grid = document.getElementById('packagesGrid');
+  grid.innerHTML = ALL_PACKAGES.map(p => `
+    <div class="pkg-card">
+      <div class="pkg-banner">
+        <img src="${p.img}" alt="${p.dest}" loading="lazy"/>
+        <div class="pkg-banner-overlay"><span>${p.dest}</span></div>
+        <div class="pkg-discount-badge">${p.discount}</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-rating">⭐ ${p.rating} (${p.reviews.toLocaleString('en-IN')} reviews)</div>
+        <h3>${p.name}</h3>
+        <div class="pkg-features">${p.features.map(f=>`<span class="feature-pill">${f}</span>`).join('')}</div>
+        <div class="pkg-footer">
+          <div class="pkg-price">
+            <div class="was">₹${p.was.toLocaleString('en-IN')}</div>
+            <small>Per person</small>
+            <strong>₹${p.price.toLocaleString('en-IN')}</strong>
+          </div>
+          <button class="btn-book" onclick="openBooking('${p.name}','${p.price}','${p.img}','pkg');event.stopPropagation()">Book Now</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══ RENDER HOTELS ═══
+function renderHotels() {
   const grid = document.getElementById('hotelsGrid');
-  grid.innerHTML = ALL_HOTELS.map(h => `
-    <div class="hotel-card" onclick="openBooking('${h.name}','${h.price}','${h.img}','hotel-${h.name.toLowerCase().replace(/[^a-z]/g,'')}')">
-      <div class="hotel-img"><img src="${h.img}" alt="${h.name}" loading="lazy"/></div>
+  grid.innerHTML = ALL_HOTELS.map((h, hi) => {
+    const gallId = `hotel-gallery-${hi}`;
+    const imgs = h.photos.map((p, i) =>
+      `<img src="${p}" alt="${h.name}" loading="lazy" class="${i===0?'active':''}"/>`
+    ).join('');
+    const dots = h.photos.map((_, i) =>
+      `<span class="${i===0?'active':''}"></span>`
+    ).join('');
+    return `
+    <div class="hotel-card" onclick="openBooking('${h.name}','${h.price}','${h.photos[0]}','hotel')">
+      <div class="hotel-img-gallery" id="${gallId}">
+        ${imgs}
+        <div class="hotel-img-dots">${dots}</div>
+      </div>
       <div class="hotel-body">
         <div>
-          ${h.badge ? `<span class="hotel-badge-tag badge-${h.badge}">${h.badgeLabel}</span>` : ''}
+          ${h.badge?`<span class="hotel-badge-tag badge-${h.badge}">${h.badgeLabel}</span>`:''}
           <h3>${h.name}</h3>
           <div class="hotel-location">📍 ${h.loc}</div>
           <div class="stars">${'★'.repeat(h.stars)}${'☆'.repeat(5-h.stars)}</div>
@@ -913,23 +1060,28 @@ function renderHotelsSection() {
             <strong>₹${h.price.toLocaleString('en-IN')}</strong>
             <small>/night · ⭐ ${h.rating}</small>
           </div>
-          <button class="btn-book" onclick="openBooking('${h.name}','${h.price}','${h.img}','hotel-${h.name.toLowerCase().replace(/[^a-z]/g,'')}');event.stopPropagation()">View Rooms</button>
+          <button class="btn-book" onclick="openBooking('${h.name}','${h.price}','${h.photos[0]}','hotel');event.stopPropagation()">View Rooms</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
+  setTimeout(initHotelGalleries, 100);
 }
-renderHotelsSection();
 
-// ═══════════ FLIGHT DATA ═══════════
+// ═══ FLIGHTS DATA — 15 airlines, many routes ═══
 const AIRLINES = [
-  {name:'IndiGo',code:'6E',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/IndiGo_Airlines_logo.svg/200px-IndiGo_Airlines_logo.svg.png'},
-  {name:'Air India',code:'AI',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Air_India_Logo.svg/200px-Air_India_Logo.svg.png'},
-  {name:'SpiceJet',code:'SG',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/SpiceJet_logo.svg/200px-SpiceJet_logo.svg.png'},
-  {name:'Vistara',code:'UK',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Vistara_Logo.svg/200px-Vistara_Logo.svg.png'},
-  {name:'GoFirst',code:'G8',logo:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=60&q=80'},
-  {name:'AirAsia India',code:'I5',logo:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=60&q=80'},
-  {name:'Akasa Air',code:'QP',logo:'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=60&q=80'},
+  {name:'IndiGo', code:'6E', emoji:'🔵'},
+  {name:'Air India', code:'AI', emoji:'🔴'},
+  {name:'SpiceJet', code:'SG', emoji:'🟠'},
+  {name:'Vistara', code:'UK', emoji:'🟣'},
+  {name:'GoFirst', code:'G8', emoji:'🟡'},
+  {name:'AirAsia India', code:'I5', emoji:'🔴'},
+  {name:'Akasa Air', code:'QP', emoji:'🟡'},
+  {name:'Star Air', code:'S5', emoji:'⚫'},
+  {name:'Alliance Air', code:'9I', emoji:'🔵'},
+  {name:'Blue Dart Aviation', code:'BZ', emoji:'🟤'},
+  {name:'FlyBig', code:'S9', emoji:'🟢'},
+  {name:'Trujet', code:'2T', emoji:'🟠'},
 ];
 
 const CITY_PAIRS = {
@@ -941,62 +1093,73 @@ const CITY_PAIRS = {
   'BLR-HYD': {from:'Bengaluru',fromCode:'BLR',to:'Hyderabad',toCode:'HYD',duration:'1h 10m'},
   'DEL-CCU': {from:'New Delhi',fromCode:'DEL',to:'Kolkata',toCode:'CCU',duration:'2h 20m'},
   'BOM-CCU': {from:'Mumbai',fromCode:'BOM',to:'Kolkata',toCode:'CCU',duration:'2h 40m'},
-  'DEFAULT': {from:'Delhi',fromCode:'DEL',to:'Mumbai',toCode:'BOM',duration:'2h 15m'}
+  'DEL-IXB': {from:'New Delhi',fromCode:'DEL',to:'Bagdogra',toCode:'IXB',duration:'2h 05m'},
+  'DEL-SXR': {from:'New Delhi',fromCode:'DEL',to:'Srinagar',toCode:'SXR',duration:'1h 45m'},
+  'BOM-GOI': {from:'Mumbai',fromCode:'BOM',to:'Goa',toCode:'GOI',duration:'1h 05m'},
+  'DEL-LEH': {from:'New Delhi',fromCode:'DEL',to:'Leh',toCode:'LEH',duration:'1h 20m'},
+  'DEFAULT': {from:'New Delhi',fromCode:'DEL',to:'Mumbai',toCode:'BOM',duration:'2h 15m'}
 };
 
 function generateFlights(route) {
   const r = route || CITY_PAIRS['DEFAULT'];
-  const times = ['05:30','06:45','07:20','08:00','09:15','10:30','11:50','13:00','14:30','16:00','17:45','19:00','20:30','22:15'];
-  const classes = ['Economy','Economy','Economy','Economy','Business','Economy','Economy','Economy'];
+  const allTimes = ['05:10','05:45','06:20','07:00','07:40','08:15','09:00','09:50','10:30','11:15','12:00','13:20','14:10','15:00','15:45','16:30','17:15','18:00','18:50','19:30','20:15','21:00','21:45','22:30'];
+  const classes = ['Economy','Economy','Economy','Business','Economy','Economy','Economy','Premium Economy','Economy','Economy','Business','Economy','Economy','Economy','Economy'];
+  const tags = ['cheapest','fastest','popular',null,null,null,null,null,null,null,null,null,null,null,null];
   const flights = [];
-  const usedAirlines = new Set();
-  for (let i=0; i<8; i++) {
+  // Use 15 times spread across day
+  const selectedTimes = allTimes.filter((_, i) => i % 1.6 < 1).slice(0, 15);
+  
+  for (let i = 0; i < 15; i++) {
     const airline = AIRLINES[i % AIRLINES.length];
-    const dep = times[i];
+    const dep = selectedTimes[i] || allTimes[i];
     const [h,m] = dep.split(':').map(Number);
-    const [dh,dm] = r.duration.split('h ').map(s=>parseInt(s));
-    const arrH = (h+dh+(dm?1:0))%24, arrM = (m+(dm||0))%60;
+    const parts = r.duration.split('h ');
+    const dh = parseInt(parts[0]);
+    const dm = parts[1] ? parseInt(parts[1]) : 0;
+    let arrH = (h + dh) % 24;
+    let arrM = m + dm;
+    if (arrM >= 60) { arrH = (arrH + 1) % 24; arrM -= 60; }
     const arr = `${String(arrH).padStart(2,'0')}:${String(arrM).padStart(2,'0')}`;
-    const base = 2800 + Math.floor(Math.random()*8000);
-    const seats = Math.floor(Math.random()*12)+1;
+    const basePrice = 1800 + Math.floor(Math.random() * 9500);
+    const seats = Math.floor(Math.random() * 18) + 1;
+    const stopOpts = ['Non-stop','Non-stop','Non-stop','Non-stop','1 Stop'];
     flights.push({
-      airline, flightNum:`${airline.code}-${200+i*37}`,
-      dep, arr, duration:r.duration,
-      stops: i===1?'1 Stop':'Non-stop',
-      price: base, seats,
-      cls: classes[i],
-      from:r.fromCode, to:r.toCode
+      airline, flightNum:`${airline.code}-${201 + i * 43}`,
+      dep, arr, duration: r.duration,
+      stops: stopOpts[i % stopOpts.length],
+      price: basePrice, seats,
+      cls: classes[i % classes.length],
+      tag: tags[i % tags.length],
+      from: r.fromCode, to: r.toCode
     });
   }
-  return flights.sort((a,b)=>a.price-b.price);
+  return flights.sort((a,b) => a.price - b.price);
 }
 
-// ═══════════ HOTEL SEARCH RESULTS ═══════════
-const HOTEL_SEARCH_RESULTS = [
-  {name:'Hotel Sea Princess, Juhu',loc:'Juhu Beach, Mumbai',stars:4,price:5200,img:'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=300&q=80',badge:'deal',rating:'4.5',amenities:'🏊 Pool · 🍽️ Breakfast · 📶 WiFi'},
-  {name:'Ritz Carlton, Pune',loc:'Koregaon Park, Pune',stars:5,price:15000,img:'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=300&q=80',badge:'luxury',rating:'4.8',amenities:'💆 Spa · 🍽️ Fine Dining · 🏊 Pool'},
-  {name:'Lemon Tree Premier, Delhi',loc:'Aerocity, New Delhi',stars:4,price:4800,img:'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=300&q=80',badge:'deal',rating:'4.4',amenities:'✈️ Airport · 🏋️ Gym · 📶 WiFi'},
-  {name:'Lalit Grand Palace, Srinagar',loc:'Dal Lake, Srinagar',stars:5,price:12500,img:'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=300&q=80',badge:'popular',rating:'4.9',amenities:'🏔️ Lake View · 🛶 Shikara · 🍽️ Meals'},
-  {name:'Fortune Select JP Cosmopolitan',loc:'Indranagar, Bangalore',stars:4,price:3900,img:'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=300&q=80',badge:'deal',rating:'4.3',amenities:'🍽️ Breakfast · 🏋️ Gym · 📶 WiFi'},
-  {name:'Novotel Imagica, Khopoli',loc:'Imagica Themepark, Mumbai',stars:5,price:7800,img:'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=300&q=80',badge:'popular',rating:'4.6',amenities:'🎢 Theme Park · 🏊 Pool · 🍽️ All Meals'},
+// ═══ HOTEL SEARCH ═══
+const HOTEL_SEARCH_EXTRA = [
+  {name:'Sea Princess Hotel, Juhu',loc:'Juhu Beach, Mumbai',stars:4,price:5200,img:'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=300&q=80',badge:'deal',rating:'4.5'},
+  {name:'Ritz Carlton, Pune',loc:'Koregaon Park, Pune',stars:5,price:15000,img:'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=300&q=80',badge:'luxury',rating:'4.8'},
+  {name:'Lemon Tree Premier, Delhi',loc:'Aerocity, New Delhi',stars:4,price:4800,img:'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=300&q=80',badge:'deal',rating:'4.4'},
+  {name:'Lalit Grand Palace, Srinagar',loc:'Dal Lake, Srinagar',stars:5,price:12500,img:'https://images.unsplash.com/photo-1531804055935-76f44d7c3621?w=300&q=80',badge:'popular',rating:'4.9'},
+  {name:'Fortune Select, Bangalore',loc:'Indranagar, Bangalore',stars:4,price:3900,img:'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=300&q=80',badge:'deal',rating:'4.3'},
+  {name:'Novotel Imagica, Khopoli',loc:'Imagica Themepark, Mumbai',stars:5,price:7800,img:'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=300&q=80',badge:'popular',rating:'4.6'},
 ];
 
-// ═══════════ SEARCH LOGIC ═══════════
+// ═══ SEARCH ═══
 let currentTab = 'hotels';
 function setTab(btn, type) {
   currentTab = type;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
+  document.getElementById('searchResultsPanel').classList.remove('show');
   const f = document.getElementById('searchFields');
   const m = {
     hotels:`<div class="field-group"><label>Destination / Hotel</label><input type="text" placeholder="Where are you going?" id="searchDestInput"/></div><div class="field-group"><label>Check-in</label><input type="date" id="checkin"/></div><div class="field-group"><label>Check-out</label><input type="date" id="checkout"/></div><button class="btn-search" onclick="handleSearch()">🔍 Search Hotels</button>`,
-    flights:`<div class="field-group"><label>From</label><input type="text" placeholder="Departure city" id="fromCity"/></div><div class="field-group"><label>To</label><input type="text" placeholder="Destination city" id="toCity"/></div><div class="field-group"><label>Date</label><input type="date" id="flightDate"/></div><button class="btn-search" onclick="handleSearch()">🔍 Search Flights</button>`,
+    flights:`<div class="field-group"><label>From</label><input type="text" placeholder="Departure city (e.g. Delhi)" id="fromCity"/></div><div class="field-group"><label>To</label><input type="text" placeholder="Destination (e.g. Mumbai)" id="toCity"/></div><div class="field-group"><label>Date</label><input type="date" id="flightDate"/></div><button class="btn-search" onclick="handleSearch()">🔍 Search Flights</button>`,
     packages:`<div class="field-group"><label>Destination</label><input type="text" placeholder="Dream destination..."/></div><div class="field-group"><label>Month</label><select><option>June 2025</option><option>July 2025</option><option>August 2025</option></select></div><div class="field-group"><label>Duration</label><select><option>3-5 Days</option><option>5-7 Days</option><option>7-10 Days</option></select></div><button class="btn-search" onclick="handleSearch()">🔍 Find Package</button>`,
     holidays:`<div class="field-group"><label>Holiday Type</label><select><option>Beach</option><option>Mountains</option><option>Heritage</option><option>Adventure</option><option>Honeymoon</option></select></div><div class="field-group"><label>Budget</label><select><option>Under ₹15,000</option><option>₹15K–₹30K</option><option>₹30K–₹60K</option><option>₹60K+</option></select></div><div class="field-group"><label>Travellers</label><select><option>1</option><option>2</option><option>3-5</option><option>6+</option></select></div><button class="btn-search" onclick="handleSearch()">🔍 Find Holidays</button>`
   };
-  // Remove old results from inside search-fields
-  const existingResults = document.getElementById('searchResultsPanel');
-  existingResults.classList.remove('show');
   f.innerHTML = m[type];
 }
 
@@ -1006,40 +1169,44 @@ function handleSearch() {
   const titleEl = document.getElementById('resultsTitle');
   const countEl = document.getElementById('resultsCount');
 
-  // Show loading
   panel.classList.add('show');
   content.innerHTML = `<div class="results-loading"><div class="loader-dots"><span></span><span></span><span></span></div> Searching best deals for you...</div>`;
   titleEl.textContent = 'Searching...';
   countEl.textContent = '';
-
-  // Scroll search box into view
   panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 
   if (currentTab === 'flights') {
-    // Parse cities
-    const from = (document.getElementById('fromCity')?.value || '').toLowerCase();
-    const to = (document.getElementById('toCity')?.value || '').toLowerCase();
+    const from = (document.getElementById('fromCity')?.value||'').toLowerCase();
+    const to = (document.getElementById('toCity')?.value||'').toLowerCase();
     let route = CITY_PAIRS['DEFAULT'];
     for (const [key, val] of Object.entries(CITY_PAIRS)) {
-      if (from.includes(val.from.toLowerCase().split(' ')[0]) || from.includes(val.fromCode.toLowerCase())) {
-        if (to.includes(val.to.toLowerCase().split(' ')[0]) || to.includes(val.toCode.toLowerCase())) {
-          route = val; break;
-        }
-        route = val;
-      }
+      if (key === 'DEFAULT') continue;
+      const fromMatch = from && (val.from.toLowerCase().includes(from) || from.includes(val.fromCode.toLowerCase()) || val.fromCode.toLowerCase().includes(from));
+      const toMatch = to && (val.to.toLowerCase().includes(to) || to.includes(val.toCode.toLowerCase()) || val.toCode.toLowerCase().includes(to));
+      if (fromMatch && toMatch) { route = val; break; }
+      if (fromMatch && !to) { route = val; break; }
     }
 
     setTimeout(() => {
       const flights = generateFlights(route);
       titleEl.textContent = `✈️ Flights: ${route.fromCode} → ${route.toCode}`;
       countEl.textContent = `${flights.length} flights found`;
-      content.innerHTML = `<div class="flight-results-list">${flights.map(f => `
-        <div class="flight-card-result" onclick="openBooking('${f.airline.name} ${f.flightNum} (${f.from}-${f.to})','${f.price}','https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=80','flight-${f.flightNum}')">
-          <img class="flight-airline-logo" src="${f.airline.logo}" alt="${f.airline.name}" onerror="this.style.display='none'"/>
+      const filterHtml = `<div class="flight-filters">
+        <button class="filter-btn active" onclick="this.parentNode.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">All Flights</button>
+        <button class="filter-btn" onclick="this.parentNode.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Non-Stop Only</button>
+        <button class="filter-btn" onclick="this.parentNode.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Economy</button>
+        <button class="filter-btn" onclick="this.parentNode.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Business</button>
+        <button class="filter-btn" onclick="this.parentNode.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Cheapest First</button>
+        <button class="filter-btn" onclick="this.parentNode.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">Earliest Departure</button>
+      </div>`;
+      const flightCards = flights.map((f, fi) => `
+        <div class="flight-card-result" onclick="openBooking('${f.airline.name} ${f.flightNum} (${f.from}→${f.to})','${f.price}','https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=80','flight')">
+          <div class="flight-airline-logo-box" style="font-size:1.6rem">${f.airline.emoji}</div>
           <div class="flight-airline-info">
             <div class="flight-airline-name">${f.airline.name}</div>
             <div class="flight-number">${f.flightNum}</div>
             <div class="flight-class-badge">${f.cls}</div>
+            ${f.tag ? `<div class="flight-tag ${f.tag}">${f.tag === 'cheapest' ? '💚 Cheapest' : f.tag === 'fastest' ? '⚡ Fastest' : '🔥 Popular'}</div>` : ''}
           </div>
           <div class="flight-route">
             <div class="flight-city">
@@ -1050,7 +1217,7 @@ function handleSearch() {
               <div class="flight-duration">${f.duration}</div>
               <div class="flight-line-bar">
                 <div class="dash"></div>
-                <span class="flight-plane-icon">✈️</span>
+                <span>✈️</span>
                 <div class="dash"></div>
               </div>
               <div class="flight-stops ${f.stops==='Non-stop'?'nonstop':''}">${f.stops}</div>
@@ -1063,45 +1230,43 @@ function handleSearch() {
           <div class="flight-price-info">
             <div class="price">₹${f.price.toLocaleString('en-IN')}</div>
             <div class="per">per person</div>
-            <div class="seats">Only ${f.seats} left!</div>
+            <div class="seats" style="color:${f.seats<=5?'var(--red)':'var(--orange)'}">
+              ${f.seats<=5?`🔴 Only ${f.seats} left!`:`${f.seats} seats left`}
+            </div>
           </div>
           <button class="btn-book-flight" onclick="openBooking('${f.airline.name} ${f.flightNum}','${f.price}','https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=80','flight');event.stopPropagation()">Book</button>
-        </div>`).join('')}</div>`;
+        </div>`).join('');
+      content.innerHTML = filterHtml + `<div class="flight-results-list">${flightCards}</div>`;
     }, 1600);
 
   } else if (currentTab === 'hotels') {
-    const dest = (document.getElementById('searchDestInput')?.value || '').toLowerCase();
+    const dest = (document.getElementById('searchDestInput')?.value||'').toLowerCase();
     setTimeout(() => {
-      // Filter hotels matching destination or show all
       let hotels = ALL_HOTELS.filter(h =>
         !dest || h.name.toLowerCase().includes(dest) ||
-        h.loc.toLowerCase().includes(dest) ||
-        h.loc.toLowerCase().split(',').some(p => dest.includes(p.trim().toLowerCase()) || p.trim().toLowerCase().includes(dest))
+        h.loc.toLowerCase().includes(dest)
       );
-      if (!hotels.length) hotels = HOTEL_SEARCH_RESULTS.map(h => ({...h, amenities: h.amenities.split(' · ').map(a=>a)}));
-      if (!hotels.length) hotels = ALL_HOTELS.slice(0, 6);
+      if (!hotels.length) hotels = [...ALL_HOTELS.slice(0,6), ...HOTEL_SEARCH_EXTRA];
+      if (!hotels.length) hotels = ALL_HOTELS;
 
-      titleEl.textContent = `🏨 Hotels${dest ? ' in ' + dest.charAt(0).toUpperCase()+dest.slice(1) : ''}`;
-      countEl.textContent = `${hotels.length} properties found`;
-      content.innerHTML = `<div class="hotel-results-list">${hotels.slice(0,8).map(h => {
-        const amenArr = Array.isArray(h.amenities) ? h.amenities.slice(0,2).join(' · ') : h.amenities || '';
-        const price = h.price;
-        const badge = h.badge || '';
-        const badgeLbl = h.badgeLabel || (badge==='deal'?'GREAT DEAL':badge==='lux'||badge==='luxury'?'LUXURY':badge==='popular'?'POPULAR':'');
-        const badgeClass = badge==='lux'||badge==='luxury'?'luxury':badge;
-        return `<div class="hotel-result-card" onclick="openBooking('${h.name}','${price}','${h.img}','hotel-sr')">
-          <img class="hotel-result-img" src="${h.img}" alt="${h.name}" loading="lazy"/>
+      titleEl.textContent = `🏨 Hotels${dest?' in '+dest.charAt(0).toUpperCase()+dest.slice(1):''}`;
+      countEl.textContent = `${Math.min(hotels.length,10)} properties found`;
+      content.innerHTML = `<div class="hotel-results-list">${hotels.slice(0,10).map(h => {
+        const img = h.photos ? h.photos[0] : h.img;
+        const badge = h.badge||''; const bl = h.badgeLabel||(badge==='hot'?'HOT DEAL':badge==='lux'?'LUXURY':badge==='eco'?'ECO':'');
+        const bc = badge==='lux'?'luxury':badge==='hot'?'deal':badge;
+        return `<div class="hotel-result-card" onclick="openBooking('${h.name}','${h.price}','${img}','hotel')">
+          <img class="hotel-result-img" src="${img}" alt="${h.name}" loading="lazy"/>
           <div class="hotel-result-body">
             <div>
-              ${badgeLbl?`<div class="hotel-result-badge badge-${badgeClass}">${badgeLbl}</div>`:''}
+              ${bl?`<div class="hotel-result-badge badge-${bc}">${bl}</div>`:''}
               <h4>${h.name}</h4>
               <div class="loc">📍 ${h.loc}</div>
               <div class="stars-sm">${'★'.repeat(h.stars||4)}${'☆'.repeat(5-(h.stars||4))} ${h.rating||'4.5'}</div>
-              <div style="font-size:0.72rem;color:var(--muted)">${amenArr}</div>
             </div>
             <div class="hotel-result-footer">
-              <div class="hotel-result-price">₹${price.toLocaleString('en-IN')}<small>/night</small></div>
-              <button class="btn-book-hotel" onclick="openBooking('${h.name}','${price}','${h.img}','hotel-sr');event.stopPropagation()">Book</button>
+              <div class="hotel-result-price">₹${h.price.toLocaleString('en-IN')}<small>/night</small></div>
+              <button class="btn-book-hotel" onclick="openBooking('${h.name}','${h.price}','${img}','hotel');event.stopPropagation()">Book</button>
             </div>
           </div>
         </div>`;
@@ -1110,14 +1275,14 @@ function handleSearch() {
 
   } else {
     setTimeout(() => {
-      titleEl.textContent = '🎒 Packages Found';
-      countEl.textContent = '4 packages available';
-      content.innerHTML = '<p style="color:var(--muted);font-size:0.9rem;padding:12px 0">Scroll down to see our curated holiday packages below! ⬇️</p>';
-    }, 1200);
+      titleEl.textContent = '🎒 Top Packages';
+      countEl.textContent = `${ALL_PACKAGES.length} packages`;
+      content.innerHTML = `<p style="color:var(--muted);font-size:0.9rem;padding:12px 0">We have <strong>${ALL_PACKAGES.length} holiday packages</strong> listed! Scroll down to browse all ⬇️</p>`;
+    }, 1000);
   }
 }
 
-// ═══════════ DATES ═══════════
+// ═══ DATES ═══
 const today = new Date();
 const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate()+1);
 const nextWeek = new Date(today); nextWeek.setDate(nextWeek.getDate()+7);
@@ -1126,16 +1291,15 @@ document.getElementById('checkout').valueAsDate = nextWeek;
 document.getElementById('bkCheckin').valueAsDate = tomorrow;
 document.getElementById('bkCheckout').valueAsDate = nextWeek;
 
-// ═══════════ STAR RATINGS ═══════════
+// ═══ STAR RATINGS ═══
 function getRatings(id){const all=DB.get('ratings');return all.find(r=>r.dest===id)||{dest:id,sum:0,count:0}}
-function saveRating(id,val){let all=DB.get('ratings');let r=all.find(r=>r.dest===id);if(!r){r={dest:id,sum:0,count:0};all.push(r);}r.sum+=val;r.count+=1;DB.set('ratings',all);DB.push('ratings_log',{dest:id,value:val,time:new Date().toISOString()})}
+function saveRating(id,val){let all=DB.get('ratings');let r=all.find(r=>r.dest===id);if(!r){r={dest:id,sum:0,count:0};all.push(r);}r.sum+=val;r.count+=1;DB.set('ratings',all);}
 function renderStars(id){const r=getRatings(id);const avg=r.count>0?r.sum/r.count:0;const stars=document.querySelectorAll(`.stars-input[data-id="${id}"] span`);stars.forEach((s,i)=>s.classList.toggle('active',i<Math.round(avg)));const avgEl=document.getElementById('avg-'+id);const cntEl=document.getElementById('count-'+id);if(avgEl)avgEl.textContent=avg.toFixed(1);if(cntEl)cntEl.textContent=`(${r.count.toLocaleString('en-IN')} ratings)`}
 function hoverRating(id,val){document.querySelectorAll(`.stars-input[data-id="${id}"] span`).forEach((s,i)=>s.classList.toggle('hover',i<val))}
 function clearHover(id){document.querySelectorAll(`.stars-input[data-id="${id}"] span`).forEach(s=>s.classList.remove('hover'))}
 function setRating(id,val,e){if(e)e.stopPropagation();saveRating(id,val);renderStars(id);showToast(`⭐ Thanks! You rated ${id.charAt(0).toUpperCase()+id.slice(1)} ${val} star${val>1?'s':''}!`,'green')}
-['goa','manali','rajasthan','kerala'].forEach(renderStars);
 
-// ═══════════ BOOKING ═══════════
+// ═══ BOOKING ═══
 let currentBookingData={};let couponApplied=false;let qrTimer=null;
 function openBooking(name,price,img,id){
   currentBookingData={name,price:parseInt(price),img,id};couponApplied=false;
@@ -1195,7 +1359,7 @@ function completeBooking(){
   const ref='TW'+Date.now().toString(36).toUpperCase().slice(-6);
   const booking={id:ref,name:currentBookingData.name,img:currentBookingData.img,destId:currentBookingData.id,guestName:(first+' '+(document.getElementById('bkLast').value||'')).trim(),email,phone:document.getElementById('bkPhone').value||'',checkin:document.getElementById('bkCheckin').value,checkout:document.getElementById('bkCheckout').value,travellers:document.getElementById('bkTravellers').value,basePrice:currentBookingData.price,tax:currentBookingData.tax||0,discount:currentBookingData.discount||0,total:currentBookingData.total||currentBookingData.price,paymentMethod:currentBookingData.paymentMethod||'card',coupon:couponApplied?'FIRST50':null,status:'confirmed',bookedAt:new Date().toISOString()};
   DB.push('bookings',booking);
-  let users=DB.get('users');if(!users.find(u=>u.email===email)){users.push({email,name:booking.guestName,joinedAt:booking.bookedAt,bookingCount:1});}else{users.find(u=>u.email===email).bookingCount=(users.find(u=>u.email===email).bookingCount||0)+1;}
+  let users=DB.get('users');if(!users.find(u=>u.email===email)){users.push({email,name:booking.guestName,joinedAt:booking.bookedAt,bookingCount:1});}else{const u=users.find(u=>u.email===email);u.bookingCount=(u.bookingCount||0)+1;}
   DB.set('users',users);DB.set('currentUser',{email,name:booking.guestName});
   document.getElementById('btnMyBookings').classList.add('visible');
   closeModal('bookingModal');
@@ -1204,7 +1368,7 @@ function completeBooking(){
   document.getElementById('successModal').classList.add('open');
 }
 
-// ═══════════ MY BOOKINGS ═══════════
+// ═══ MY BOOKINGS ═══
 function openMyBookings(){renderBookingsList();document.getElementById('bookingsModal').classList.add('open');}
 function renderBookingsList(){
   const list=document.getElementById('bookingsList');const bookings=DB.get('bookings');
@@ -1212,7 +1376,7 @@ function renderBookingsList(){
   list.innerHTML=bookings.slice().reverse().map(b=>`<div class="booking-item"><img src="${b.img}" alt="" onerror="this.style.display='none'"/><div class="booking-item-info"><h4>${b.name}</h4><div class="bk-ref">${b.id}</div><div class="bk-dates">📅 ${b.checkin||'—'} → ${b.checkout||'—'} · ${b.travellers||'2 Adults'}</div><div class="bk-amount">₹${(b.total||b.basePrice||0).toLocaleString('en-IN')} · ${b.paymentMethod?.toUpperCase()||'CARD'}</div></div><div class="booking-item-actions"><span class="status-badge status-${b.status}">${b.status}</span><button class="btn-cancel-bk" onclick="openCancel('${b.id}')" ${b.status!=='confirmed'?'disabled':''}>${b.status==='confirmed'?'Cancel':'Cancelled'}</button></div></div>`).join('');
 }
 
-// ═══════════ CANCELLATION ═══════════
+// ═══ CANCELLATION ═══
 let cancelTargetId=null;
 function openCancel(bookingId){
   const bookings=DB.get('bookings');const b=bookings.find(x=>x.id===bookingId);if(!b)return;
@@ -1231,11 +1395,11 @@ function confirmCancel(){
   showToast('✅ Booking cancelled. Refund initiated!','green');
 }
 
-// ═══════════ AUTH ═══════════
+// ═══ AUTH ═══
 function fakeLogin(){const email=document.getElementById('loginEmail').value.trim();const name=email.split('@')[0]||'Traveller';DB.set('currentUser',{email,name});document.getElementById('btnMyBookings').classList.add('visible');closeModal('authModal');showToast(`✅ Welcome back, ${name}!`,'green');}
 function fakeSignup(){const name=document.getElementById('signupName').value.trim()||'Traveller';const email=document.getElementById('signupEmail').value.trim();let users=DB.get('users');if(!users.find(u=>u.email===email)){DB.push('users',{email,name,joinedAt:new Date().toISOString(),bookingCount:0});}DB.set('currentUser',{email,name});document.getElementById('btnMyBookings').classList.add('visible');closeModal('authModal');showToast(`🎉 Welcome to TripWave, ${name}!`,'green');}
 
-// ═══════════ ADMIN ═══════════
+// ═══ ADMIN ═══
 function toggleAdmin(){const d=document.getElementById('adminDrawer');d.classList.toggle('open');if(d.classList.contains('open'))showAdminTab('overview',document.querySelector('.admin-tab'));}
 function showAdminTab(tab,btn){
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');
@@ -1252,17 +1416,33 @@ function exportJSON(){const data={bookings:DB.get('bookings'),users:DB.get('user
 function download(filename,content,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=filename;a.click();}
 function clearDB(){if(confirm('Delete ALL data? This cannot be undone.')){['bookings','users','ratings','ratings_log','currentUser'].forEach(k=>localStorage.removeItem('tw_'+k));showToast('🗑️ All data cleared');toggleAdmin();setTimeout(toggleAdmin,100);}}
 
-// ═══════════ MODALS ═══════════
+// ═══ MODALS ═══
 function openModal(type){document.getElementById('authModal').classList.add('open');switchModal(type);}
 function closeModal(id){document.getElementById(id).classList.remove('open');if(id==='bookingModal'&&qrTimer)clearInterval(qrTimer);}
 function switchModal(type){document.getElementById('loginView').style.display=type==='login'?'block':'none';document.getElementById('signupView').style.display=type==='signup'?'block':'none';}
 ['authModal','bookingModal','successModal','bookingsModal','cancelModal','refundModal'].forEach(id=>{document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))closeModal(id);});});
 
-// ═══════════ TOAST ═══════════
+// ═══ TOAST ═══
 let toastTimer;
 function showToast(msg,type=''){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.className='toast'+(type?' '+type:'')+' show';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3200);}
 
+// ═══ INIT ═══
+renderDestinations();
+renderPackages();
+renderHotels();
 const cu=DB.get('currentUser');if(cu&&cu.email)document.getElementById('btnMyBookings').classList.add('visible');
+
+// Auto-rotate destination galleries
+setInterval(() => {
+  document.querySelectorAll('.dest-img-gallery').forEach(g => {
+    const imgs = g.querySelectorAll('img');
+    if (imgs.length < 2) return;
+    let cur = 0;
+    imgs.forEach((img, i) => { if (img.classList.contains('active')) cur = i; });
+    const next = (cur + 1) % imgs.length;
+    navGallery(g.id, 1, null);
+  });
+}, 4000);
 </script>
 </body>
 </html>
